@@ -1,208 +1,208 @@
 ---
 name: balken-race
-description: "Erzeugt ein Balken-Rennen (Bar Chart Race): waagerechte Balken wachsen, überholen sich und tauschen die Plätze, während die Zahlen hochzählen. Dunkler Nachtblau-Hintergrund, sechs Farbverläufe, kein Ton. Nutze es, wenn jemand eine Rangliste über die Zeit als Video will: 'Balken-Race', 'Bar Chart Race', 'Balkenrennen', 'racing bars', 'Ranking-Video', 'Diagramm-Video', 'Daten als Video', 'CSV als Video', 'welches Land/Produkt/Team führt wann'. Datenquelle ist eine CSV, eine Tabelle oder eine KI-Recherche. Nicht für Einzelwert-Animationen, Tortendiagramme oder Liniencharts. Voraussetzung: HyperFrames CLI."
+description: "Builds a bar chart race: horizontal bars grow, overtake each other and swap places while the numbers count along. Dark navy background, six gradients, no audio. Use it when someone wants a ranking over time as a video: 'bar chart race', 'racing bars', 'ranking video', 'chart video', 'data as video', 'CSV as video', 'which country/product/team leads when', 'Balken-Race', 'Balkenrennen', 'Ranking-Video', 'Daten als Video'. The data source is a CSV, a table, or AI research. Not for single-value animations, pie charts or line charts. Requires the HyperFrames CLI."
 ---
 
-# Balken-Race
+# Bar Chart Race
 
-Waagerechte Balken wachsen, überholen sich und tauschen die Plätze. Der Führende
-füllt immer die volle Breite, die Zahl am Balkenende zählt mit. Kein Ton, keine
-Sprecherstimme, keine Bilder — die Bewegung der Rangliste ist das ganze Video.
+Horizontal bars grow, overtake each other and swap places. The leader always
+fills the full width and the number at the end of the bar counts along. No audio,
+no narrator, no images — the movement of the ranking is the whole video.
 
-Design, Timing und Farben sind aus einer Referenzaufnahme vermessen und stecken
-fertig in `template/build.mjs`. Du lieferst nur die Daten.
+Design, timing and colours were measured off a reference clip and are baked into
+`template/build.mjs`. You only supply the data.
 
-**Die Laufzeit ergibt sich aus der Datenmenge.** Mehr Perioden = längeres Video,
-ohne dass du etwas einstellst. 6 Perioden ≈ 6,5 s, 24 Perioden ≈ 25 s.
+**The runtime follows the amount of data.** More periods = longer video, with
+nothing to configure. 6 periods ≈ 6.5 s, 24 periods ≈ 25 s.
 
-## Voraussetzung zuerst prüfen
+## Check the requirement first
 
 ```bash
 npx hyperframes --version
 ```
 
-Schlägt das fehl, brich ab und sage dem User:
+If that fails, stop and tell the user:
 
-> Dieser Skill braucht die HyperFrames CLI. Installieren mit:
+> This skill needs the HyperFrames CLI. Install it with:
 > `npx skills add heygen-com/hyperframes --global --copy --all`
 
-Rate nicht daran vorbei und baue keinen Ersatz.
+Do not guess your way around it and do not build a substitute.
 
-## Schritt 1 — Daten beschaffen
+## Step 1 — Get the data
 
-Es gibt genau zwei Wege. Kläre zuerst, welcher gilt.
+There are exactly two routes. Establish which one applies first.
 
-### Weg A — der User hat Daten
+### Route A — the user has data
 
-CSV, Excel-Export, Tabelle im Chat. Nimm sie und geh zu Schritt 2.
+A CSV, an Excel export, a table in the chat. Take it and go to step 2.
 
-### Weg B — der User nennt nur ein Thema
+### Route B — the user only names a topic
 
-Dann recherchierst du die Zahlen selbst. Halte dich an drei Regeln:
+Then you research the numbers yourself. Three rules:
 
-1. **Nenne die Quelle** und das Jahr, aus dem die Zahlen stammen — im Untertitel
-   des Videos und im Chat.
-2. **Erfinde keine Zwischenjahre.** Wenn du für 2010 und 2020 belastbare Werte
-   hast, für die Jahre dazwischen aber nicht, dann nimm zwei Perioden statt elf
-   ausgedachte. Ein Balken-Race interpoliert ohnehin weich zwischen den Werten.
-3. **Lege dem User die Tabelle zur Freigabe vor, bevor du baust.** Zahlen im
-   Video sehen wie Fakten aus. Falsche Zahlen fallen im Video niemandem auf.
+1. **Name the source** and the year the numbers come from — in the video's
+   subtitle and in the chat.
+2. **Do not invent intermediate years.** If you have solid values for 2010 and
+   2020 but not for the years in between, use two periods rather than eleven
+   made-up ones. A bar chart race interpolates smoothly between values anyway.
+3. **Put the table in front of the user for approval before you build.** Numbers
+   in a video look like facts, and wrong numbers in a video are something nobody
+   catches.
 
-### Die Redaktionsregel — das Wichtigste an diesem Format
+### The editorial rule — the most important thing about this format
 
-Ein Balken-Race lebt vom **Überholen**. Bleibt die Reihenfolge über alle Perioden
-gleich, hast du kein Rennen gebaut, sondern ein Balkendiagramm, das langsam
-größer wird — und dafür lohnt kein Video.
+A bar chart race lives on **overtaking**. If the order stays the same across all
+periods, you have not built a race but a bar chart that slowly gets bigger — and
+that is not worth a video.
 
-Bevor du baust, prüf die Daten auf diese eine Frage:
+Before building, check the data against this one question:
 
-> **Wechselt der erste Platz mindestens einmal?**
+> **Does first place change at least once?**
 
-Wenn nein, ist eins davon der Ausweg:
+If not, one of these is the way out:
 
-- **Anderer Ausschnitt.** Länger zurückgehen, bis der Aufsteiger noch hinten lag.
-- **Andere Kennzahl.** Absolute Umsätze ändern die Reihenfolge selten, Wachstum
-  oder Marktanteil dagegen oft.
-- **Andere Teilnehmer.** Den ewigen Marktführer weglassen und das Rennen
-  dahinter zeigen.
-- **Anderes Format.** Sag dem User ehrlich, dass seine Daten kein Rennen
-  hergeben, und schlag ein einfaches Balkendiagramm oder eine andere Darstellung
-  vor. Das ist besser, als ein totes Video abzuliefern.
+- **A different window.** Go further back, until the riser was still behind.
+- **A different metric.** Absolute revenue rarely changes the order; growth or
+  market share often does.
+- **Different participants.** Drop the perennial market leader and show the race
+  behind them.
+- **A different format.** Tell the user honestly that their data does not make a
+  race and propose a plain bar chart or another presentation. That beats
+  delivering a dead video.
 
-Bei 8–20 Teilnehmern und `visibleRows: 10` entsteht der beste Effekt: Balken
-fahren von unten ins Bild und schieben andere heraus.
+8–20 participants with `visibleRows: 10` gives the best effect: bars drive in
+from below and push others out of frame.
 
-## Schritt 2 — Projekt anlegen
+## Step 2 — Set up the project
 
-`<projekt>` ist ein kurzer kebab-case-Name aus dem Thema.
-
-```bash
-npx hyperframes init videos/<projekt> --non-interactive --example=blank
-cp <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/csv-to-data.mjs videos/<projekt>/
-```
-
-Kopiere die Skripte **immer ins Projekt**. Führe sie nie aus dem Skill-Ordner
-heraus aus: Das fertige Videoprojekt muss auch dann noch rendern, wenn dieser
-Skill aktualisiert oder deinstalliert wird.
-
-## Schritt 3 — Daten in `data.json` bringen
-
-### Aus einer CSV
+`<project>` is a short kebab-case name derived from the topic.
 
 ```bash
-cd videos/<projekt>
-node csv-to-data.mjs /pfad/zur/datei.csv data.json
+npx hyperframes init videos/<project> --non-interactive --example=blank
+cp <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/csv-to-data.mjs videos/<project>/
 ```
 
-Erwartet wird: erste Spalte der Name, alle weiteren Spalten je eine Periode in
-zeitlicher Reihenfolge.
+Always copy the scripts **into the project**. Never run them out of the skill
+folder: the finished video project has to keep rendering even if this skill is
+later updated or uninstalled.
+
+## Step 3 — Get the data into `data.json`
+
+### From a CSV
+
+```bash
+cd videos/<project>
+node csv-to-data.mjs /path/to/file.csv data.json
+```
+
+It expects the first column to be the name and every further column to be one
+period in chronological order.
 
 ```
-Land,2020,2021,2022,2023
-Deutschland,412,455,501,548
-Frankreich,388,431,489,540
+Country,2020,2021,2022,2023
+Germany,412,455,501,548
+France,388,431,489,540
 ```
 
-Das Lang-Format (`name,periode,wert` — eine Zeile je Messpunkt) wird erkannt und
-automatisch gedreht. Semikolon als Trenner, deutsche Dezimalkommas, Tausender­punkte,
-`€`, `%` und leere Zellen werden verarbeitet.
+The long format (`name,period,value` — one row per data point) is detected and
+pivoted automatically. Semicolon separators, German decimal commas and thousands
+dots, `€`, `%` and empty cells are all handled.
 
-Danach `title` und `subtitle` ausfüllen — der Konverter schreibt dort `TODO` hinein.
+Afterwards fill in `title` and `subtitle` — the converter writes `TODO` there.
 
-### Von Hand
+### By hand
 
 ```json
 {
-  "title": "Marktanteil Europa",
-  "subtitle": "Umsatz je Land · Mrd. € · Quelle: Eurostat 2024",
-  "valueSuffix": " Mrd",
+  "title": "Market share Europe",
+  "subtitle": "Revenue by country · € bn · Source: Eurostat 2024",
+  "valueSuffix": " bn",
   "periods": ["2020", "2021", "2022", "2023"],
   "series": [
-    { "name": "Deutschland", "values": [412, 455, 501, 548] },
-    { "name": "Frankreich", "values": [388, 431, 489, 540] }
+    { "name": "Germany", "values": [412, 455, 501, 548] },
+    { "name": "France", "values": [388, 431, 489, 540] }
   ],
   "options": { "format": "landscape", "visibleRows": 6 }
 }
 ```
 
-| Feld | |
+| Field | |
 | --- | --- |
-| `title` | Überschrift. Kurz halten — lange Titel werden automatisch verkleinert. |
-| `subtitle` | Was die Zahlen sind, ihre Einheit, und bei Recherche die Quelle. Weglassbar. |
-| `valueSuffix` | Hinter jede Zahl gehängt, z. B. `" Mrd"`, `" %"`. |
-| `periods` | Beschriftungen. Nur nötig für `showPeriodLabel`, aber gut zur Selbstkontrolle. |
-| `series[].name` | Wird links neben dem Balken angezeigt. |
-| `series[].values` | Ein Wert je Periode. `null` heißt „noch nicht im Rennen". |
-| `series[].color` | Optional. Hex (`"#F0910B"`) oder `orange`, `violet`, `pink`, `indigo`, `cyan`, `green`. |
+| `title` | Heading. Keep it short — long titles are scaled down automatically. |
+| `subtitle` | What the numbers are, their unit, and for researched data the source. Optional. |
+| `valueSuffix` | Appended to every number, e.g. `" bn"`, `" %"`. |
+| `periods` | Labels. Only needed for `showPeriodLabel`, but useful as a self-check. |
+| `series[].name` | Shown to the left of the bar. |
+| `series[].values` | One value per period. `null` means “not in the race yet”. |
+| `series[].color` | Optional. Hex (`"#F0910B"`) or `orange`, `violet`, `pink`, `indigo`, `cyan`, `green`. |
 
-### Optionen
+### Options
 
-| Option | Standard | |
+| Option | Default | |
 | --- | --- | --- |
 | `format` | `landscape` | `landscape` 1920×1080, `portrait` 1080×1920, `square` 1080×1080 |
-| `visibleRows` | 6 (max. Anzahl Serien) | Wie viele Balken gleichzeitig zu sehen sind |
-| `decimals` | 0 | Nachkommastellen der Zahlen |
-| `secondsPerPeriod` | 0,9 | Tempo. **Nur anfassen, wenn der User die Länge vorgibt.** |
-| `hold` | 0,65 | Standzeit auf dem Endstand, bevor ausgeblendet wird |
-| `showPeriodLabel` | aus | Blendet die aktuelle Periode unten rechts ein |
+| `visibleRows` | 6 (capped at the series count) | How many bars are on screen at once |
+| `decimals` | 0 | Decimal places on the numbers |
+| `secondsPerPeriod` | 0.9 | Pace. **Only touch this when the user dictates the length.** |
+| `hold` | 0.65 | How long the final state holds before fading |
+| `showPeriodLabel` | off | Shows the current period bottom right |
 
-## Schritt 4 — Bauen, prüfen, rendern
+## Step 4 — Build, check, render
 
 ```bash
-cd videos/<projekt>
+cd videos/<project>
 node build.mjs data.json
 npx hyperframes check .
 npx hyperframes render . -q high -o ./renders/video.mp4
 ```
 
-`build.mjs` gibt Serien, Perioden und die berechnete Laufzeit aus und **warnt**,
-wenn das Video über 90 Sekunden lang wird oder der Titel zu lang ist. Nimm die
-Warnungen ernst.
+`build.mjs` prints series, periods and the computed runtime, and **warns** when
+the video runs past 90 seconds or the title is too long. Take the warnings
+seriously.
 
-Bricht `build.mjs` ab, sagt die Meldung genau, welche Serie das Problem hat.
-Häufig: unterschiedlich viele Werte je Serie (jede Serie braucht einen Wert für
-**jede** Periode — Lücken als `null`).
+If `build.mjs` aborts, the message says exactly which series is the problem. The
+usual cause: series with different numbers of values — every series needs a value
+for **every** period, with gaps as `null`.
 
-## Wenn die Laufzeit nicht passt
+## When the runtime does not fit
 
-Die Laufzeit ist `0,85 s Vorlauf + (Perioden − 1) × 0,9 s + 0,65 s Standzeit + 0,5 s Ausblende`,
-bei mehr als sechs sichtbaren Zeilen leicht gestreckt.
+The runtime is `0.85 s lead-in + (periods − 1) × 0.9 s + 0.65 s hold + 0.5 s fade`,
+stretched slightly above six visible rows.
 
-Will der User es **kürzer**, ist die erste Wahl **weniger Perioden** (jedes
-zweite Jahr statt jedes Jahr), nicht ein kleineres `secondsPerPeriod`. Unter etwa
-0,6 s pro Periode kann das Auge den Rangwechseln nicht mehr folgen, und genau
-die sind der Inhalt.
+If the user wants it **shorter**, the first move is **fewer periods** (every
+second year instead of every year), not a smaller `secondsPerPeriod`. Below about
+0.6 s per period the eye can no longer follow the rank changes, and those are the
+content.
 
-## Was du nicht anfassen solltest
+## What not to touch
 
-Der `STYLE`-Block in `build.mjs` enthält die an der Referenz vermessenen Werte:
-Farbverläufe, Balkenhöhe, Eckenradius, das helle Pill am Balkenanfang, der
-farbige Schein darunter, die Wachstumskurve des Vorlaufs und die Ease-Form der
-Rangwechsel. Jede Zeile trägt im Kommentar, woraus sie gemessen wurde.
+The `STYLE` block in `build.mjs` holds the values measured off the reference:
+gradients, bar height, corner radius, the light pill at the start of the bar, the
+coloured glow beneath it, the growth curve of the lead-in and the easing shape of
+the rank changes. Every line carries a comment saying what it was measured from.
 
-Ändere daran nur, was der User ausdrücklich verlangt.
+Change only what the user explicitly asks for.
 
-Zwei Werte sind besonders empfindlich:
+Two values are especially delicate:
 
-- **`introExponent: 0.9`** ist an vier gemessenen Punkten der Wachstumskurve
-  gefittet. Andere Werte lassen die Balken sichtbar falsch anlaufen.
-- **Die Rangwechsel nutzen eine kubische In-Out-Kurve**, keinen Smoothstep. Das
-  wurde gemessen: In der Referenz ist das Spitzentempo eines Wechsels rund das
-  Dreifache seines Durchschnitts. Smoothstep erreicht nur das 1,5-fache und
-  lässt die Zeilen träge dahinschleichen statt zu wechseln.
+- **`introExponent: 0.9`** is fitted to four measured points on the growth curve.
+  Other values make the bars visibly start wrong.
+- **The rank changes use a cubic in-out curve**, not a smoothstep. That was
+  measured: in the reference the peak speed of a swap is roughly three times its
+  average. Smoothstep only reaches 1.5× and makes the rows creep along instead of
+  swapping.
 
-## Grenzen, die du kennen solltest
+## Limits you should know about
 
-- **Ab sieben Serien wiederholen sich die Farben.** Die Palette hat sechs Farben,
-  wie die Referenz. Bei vielen Teilnehmern können zwei gleichfarbige Balken
-  nebeneinander liegen. Ist das störend, setz `color` gezielt pro Serie.
-- **Beim Überholen kreuzen sich zwei Zeilen** und überlagern sich kurz. Das macht
-  die Referenz genauso; es ist kein Fehler.
-- **Negative Werte sind nicht vorgesehen.** Der Balken misst vom Nullpunkt nach
-  rechts. Bei Daten mit negativen Werten sag das dem User, statt sie still auf 0
-  zu klemmen.
+- **From the seventh series on, colours repeat.** The palette has six colours,
+  like the reference. With many participants two identically coloured bars can
+  end up adjacent. If that bothers, set `color` per series.
+- **During an overtake two rows cross** and briefly overlap. The reference does
+  the same; it is not a bug.
+- **Negative values are not supported.** The bar measures from zero to the right.
+  With negative data, say so to the user rather than silently clamping to 0.
 
-## Danach
+## Afterwards
 
-Zeig dem User das gerenderte MP4. Für einen weiteren Datensatz im selben Stil
-reicht es, `data.json` zu ändern und `node build.mjs` erneut laufen zu lassen.
+Show the user the rendered MP4. For another data set in the same style it is
+enough to change `data.json` and run `node build.mjs` again.

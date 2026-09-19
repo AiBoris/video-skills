@@ -1,12 +1,28 @@
 {
-  "title": "WARUM WIR NOCH WARTEN",
+  "title": "WHY WE ARE STILL WAITING",
   "lines": [
-    { "text": "1. DATENSCHUTZ" },
-    { "text": "2. UNSERE BRANCHE IST ANDERS" },
-    { "text": "3. DIE MITARBEITER MACHEN DAS NICHT MIT" },
-    { "text": "4. ERST MUSS DIE IT:" },
-    { "text": "A. DIE PROZESSE SAUBER HABEN", "sub": true },
-    { "text": "B. DEN DATENSCHUTZ PRÜFEN", "sub": true },
-    { "text": "5. NÄCHSTES JAHR DANN WIRKLICH" }
+    {
+      "text": "1. DATA PROTECTION"
+    },
+    {
+      "text": "2. OUR INDUSTRY IS DIFFERENT"
+    },
+    {
+      "text": "3. THE TEAM WILL NOT GO ALONG"
+    },
+    {
+      "text": "4. FIRST IT DEPENDS ON:"
+    },
+    {
+      "text": "A. CLEANING UP THE PROCESSES",
+      "sub": true
+    },
+    {
+      "text": "B. THE PRIVACY REVIEW",
+      "sub": true
+    },
+    {
+      "text": "5. NEXT YEAR THEN, REALLY"
+    }
   ]
 }

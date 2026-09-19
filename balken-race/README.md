@@ -1,36 +1,26 @@
-# Balken-Race — Skill für KI-Agenten
+# Bar Chart Race — a skill for AI agents
 
-Erzeugt Videos, in denen waagerechte Balken wachsen, sich überholen und die
-Plätze tauschen — ein Bar Chart Race. Dunkler Hintergrund, sechs Farbverläufe,
-stumm. Datenquelle ist eine CSV, eine Tabelle oder eine KI-Recherche.
+Builds videos in which horizontal bars grow, overtake each other and swap places
+while the numbers count along. Dark navy background, six gradients, silent.
 
-**Die Laufzeit ergibt sich aus der Datenmenge:** 6 Perioden ≈ 6,5 s,
-24 Perioden ≈ 25 s. Nichts einzustellen.
+> **New here? Read SETUP.md** — step by step, no prior knowledge needed.
+> This is the short version.
 
-> **Neu hier? Lies ANLEITUNG.md** — Schritt für Schritt, ohne Vorkenntnisse.
-> Das hier ist die Kurzfassung.
-
-## Installieren
-
-Ordner entpacken, dann:
+## Install
 
 ```bash
-npx skills add /pfad/zu/balken-race-skill --global --copy --all
+npx skills add AiBoris/video-skills@balken-race --global --copy --all
 ```
 
-- `--copy` kopiert statt zu verlinken. Ohne das Flag geht der Skill kaputt,
-  sobald du diesen Ordner verschiebst oder löschst.
-- `--global` installiert für alle Projekte, nicht nur das aktuelle.
-- `--all` überspringt die Rückfragen.
+To get all seven skills instead, drop the `@balken-race`. Restart your AI agent
+afterwards.
 
-Danach den KI-Agenten neu starten.
+- `--copy` copies instead of linking, `--global` installs for every project,
+  `--all` skips the prompts.
 
-Der Skill wird für alle gängigen KI-Agenten installiert — Claude Code, Codex,
-Cursor, Gemini, Goose, opencode, Roo, Windsurf und weitere.
+## Requirements
 
-## Voraussetzungen
-
-Node.js 22 oder neuer (`node --version`), FFmpeg (`ffmpeg -version`) und die
+Node.js 22 or newer (`node --version`), FFmpeg (`ffmpeg -version`) and the
 HyperFrames CLI:
 
 ```bash
@@ -38,31 +28,52 @@ brew install ffmpeg          # Mac; Windows: winget install ffmpeg
 npx skills add heygen-com/hyperframes --global --copy --all
 ```
 
-## Benutzen
+## Use it
 
-Sag deinem Agenten:
+Just tell your agent:
 
-> Mach mir ein Balken-Race aus dieser CSV: /pfad/zur/datei.csv
+> Build a bar chart race from this CSV
 
-oder ohne eigene Daten:
+It asks for for your data — or researches the numbers and shows you the table for approval, sets up the project and renders the MP4.
 
-> Mach mir ein Balken-Race über die größten Autohersteller 2015 bis 2025
+## The trick
 
-Bei einem Thema recherchiert er die Zahlen und legt sie dir zur Freigabe vor,
-bevor er baut. Danach legt er das Projekt an und rendert das MP4.
+A bar chart race lives on **overtaking**. If the order never changes, you have
+built a bar chart that slowly gets bigger, and that is not worth a video.
 
-## Was drin ist
+Before building, check the data against one question: **does first place change
+at least once?** If not — go further back in time, pick a different metric
+(growth or market share change order far more often than absolute revenue), or
+drop the perennial leader and show the race behind them.
+
+8 to 20 participants with `visibleRows: 10` gives the best effect: bars drive in
+from below and push others out of frame.
+
+## Runtime
+
+Follows the data. 6 periods ≈ 6.5 s, 24 periods ≈ 25 s — nothing to configure.
+
+Too long? Use **fewer periods** (every second year instead of every year) rather
+than a faster pace. Below about 0.6 s per period the eye can no longer follow the
+rank changes, and those are the content.
+
+## Limits
+
+- Three formats: 16:9, portrait, square
+- Six colours — from the seventh series on they repeat; set `color` per series
+- Negative values are not supported
+- No audio
+
+## What is in here
 
 ```
-ANLEITUNG.md              Einrichtung für Einsteiger
-SKILL.md                  Anleitung für den Agenten
+SETUP.md                  setup for beginners
+SKILL.md                  instructions for the agent
 template/
-  build.mjs               Generator + alle vermessenen Stilwerte
+  build.mjs               generator + every measured style value
   csv-to-data.mjs         CSV -> data.json
-  data.example.json       Beispieldatensatz (der Nachbau der Referenz)
+  data.example.json       example data set
 ```
 
-## Formate
-
-`landscape` 1920×1080 · `portrait` 1080×1920 · `square` 1080×1080 —
-per `options.format` in `data.json`.
+Every project gets its own copy of `build.mjs` and the assets, so a finished
+video still renders years later even if this skill is updated or removed.

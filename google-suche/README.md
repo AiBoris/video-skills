@@ -1,33 +1,27 @@
-# Google-Suche — Skill für KI-Agenten
+# Google Search — a skill for AI agents
 
-Erzeugt Videos, in denen sich eine Frage Zeichen für Zeichen ins Google-Suchfeld
-tippt und ein Mauszeiger danach auf „Google Search" klickt. Stumm, 6 bis 10
-Sekunden, in 16:9, 9:16, 1:1 oder 4:5.
+Builds videos in which a question types itself into the Google search box and a
+mouse pointer then clicks “Google Search”. Silent, 6 to 10 seconds, in 16:9,
+9:16, 1:1 or 4:5.
 
-> **Neu hier? Lies ANLEITUNG.md** — Schritt für Schritt, ohne Vorkenntnisse.
-> Das hier ist die Kurzfassung.
+> **New here? Read SETUP.md** — step by step, no prior knowledge needed.
+> This is the short version.
 
-## Installieren
-
-Ordner entpacken, dann:
+## Install
 
 ```bash
-npx skills add /pfad/zu/google-suche-skill --global --copy --all
+npx skills add AiBoris/video-skills@google-suche --global --copy --all
 ```
 
-- `--copy` kopiert statt zu verlinken. Ohne das Flag geht der Skill kaputt,
-  sobald du diesen Ordner verschiebst oder löschst.
-- `--global` installiert für alle Projekte, nicht nur das aktuelle.
-- `--all` überspringt die Rückfragen.
+To get all seven skills instead, drop the `@google-suche`. Restart your AI agent
+afterwards.
 
-Danach den KI-Agenten neu starten.
+- `--copy` copies instead of linking, `--global` installs for every project,
+  `--all` skips the prompts.
 
-Der Skill wird für alle gängigen KI-Agenten installiert — Claude Code, Codex,
-Cursor, Gemini, Goose, opencode, Roo, Windsurf und weitere.
+## Requirements
 
-## Voraussetzungen
-
-Node.js 22 oder neuer (`node --version`), FFmpeg (`ffmpeg -version`) und die
+Node.js 22 or newer (`node --version`), FFmpeg (`ffmpeg -version`) and the
 HyperFrames CLI:
 
 ```bash
@@ -35,66 +29,65 @@ brew install ffmpeg          # Mac; Windows: winget install ffmpeg
 npx skills add heygen-com/hyperframes --global --copy --all
 ```
 
-## Benutzen
+## Use it
 
-Sag deinem Agenten einfach:
+Just tell your agent:
 
-> Mach mir ein Google-Suche-Video mit der Frage „Wie erstelle ich Videos mit KI?"
+> Make me a Google search video with the question “How do I make videos with AI?”
 
-Er fragt nach Frage, Format, Farbvariante und Sprache der Buttons, legt das
-Projekt an und rendert das MP4.
+It asks for the question, format, colour variant and button language, sets up the project and renders the MP4.
 
-## Was drin ist
+## Formats
 
-```
-ANLEITUNG.md              Einrichtung für Einsteiger
-SKILL.md                  Anleitung für den Agenten
-template/
-  build.mjs               Generator + alle vermessenen Stilwerte
-  content.json            Beispielinhalt
-  assets/google-logo.svg  Original-Wortmarke (liegt lokal bei, damit Renders
-                          offline und überall identisch aussehen)
-```
-
-## Formate
-
-`16:9` (1920×1080), `9:16` (1080×1920), `1:1` und `4:5` — über `format` in
+`16:9` (1920×1080), `9:16` (1080×1920), `1:1` and `4:5` — via `format` in
 `content.json`.
 
-Die Seite behält in jedem Format ihre Originalmaße. Im Hochformat wirkt sie
-dadurch klein, mit viel Luft unten. Wenn das Video auf dem Handy lesbar sein
-soll, `"scale": 1.5` dazusetzen — dann füllt das Suchfeld die Breite.
+The page keeps its original pixel sizes in every format, which makes it look
+small in portrait with a lot of air below. If the video has to be readable on a
+phone, add `"scale": 1.5` and the search box fills the width.
 
-## Drei Varianten
+## Three variants
 
-| `theme` | Aussehen                                                  |
-| ------- | --------------------------------------------------------- |
-| `cream` | warme Creme-Variante — hebt sich im Feed am stärksten ab   |
-| `light` | die gewohnte weiße Startseite                             |
-| `dark`  | Dark Mode                                                 |
+| `theme` | Look |
+| --- | --- |
+| `cream` | warm cream — stands out most in a feed |
+| `light` | the familiar white start page |
+| `dark` | dark mode |
 
-Buttons wahlweise englisch („Google Search" / „I'm Feeling Lucky") oder deutsch
-(„Google Suche" / „Auf gut Glück!"). Der Mauszeiger kann statt der Suche auch
-„Auf gut Glück!" klicken.
+Buttons in English (“Google Search” / “I'm Feeling Lucky”) or German
+(“Google Suche” / “Auf gut Glück!”). The pointer can click either one.
 
-## Der Trick am Format
+## The trick
 
-Es muss die Frage sein, die dein Zuschauer **wirklich** eingibt. Kleinschreibung
-ohne Satzzeichen wirkt echter als ein sauber formulierter Satz. Eine
-Marketing-Formulierung („Professionelle Videoproduktion Agentur") tötet den
-Effekt sofort.
+It has to be the question your viewer **actually** types. Lowercase with no
+punctuation reads more honestly than a polished sentence. A marketing phrase
+(“Professional Video Production Agency”) kills the effect instantly.
 
-## Grenzen
+## Limits
 
-- Maximal etwa 60 Zeichen, eine Zeile
-- Kein Ton, keine Ergebnisseite, kein Seitenwechsel
-- Laufzeit ergibt sich aus der Zeichenzahl
-- Im Hochformat liegt `scale` bei maximal 1.5, sonst berührt das Feld den Rand
+- About 60 characters, one line
+- No audio, no results page, no navigation
+- Runtime follows the character count
+- In portrait `scale` tops out at 1.5, above that the box touches the edge
 
-`build.mjs` warnt, wenn die Frage zu lang für das Feld wird.
+`build.mjs` warns when the question is too long for the box.
 
-## Rechtliches
+## What is in here
 
-Das mitgelieferte Logo ist Googles Wortmarke. Für Mockups, Hooks und
-redaktionelle Videos ist das üblich; für Werbung, die eine Google-Zugehörigkeit
-oder -Empfehlung suggeriert, ist es das nicht.
+```
+SETUP.md                  setup for beginners
+SKILL.md                  instructions for the agent
+template/
+  build.mjs               generator + every measured style value
+  content.json            example content
+  assets/google-logo.svg  the original wordmark (bundled so renders work
+                          offline and look identical everywhere)
+```
+
+Every project gets its own copy of `build.mjs` and the assets, so a finished
+video still renders years later even if this skill is updated or removed.
+
+## Legal
+
+The bundled logo is Google's wordmark. Usual practice for mockups, hooks and
+editorial video; not for advertising that implies Google endorses you.

@@ -1,44 +1,27 @@
-# Kennzahlen-Karten — Skill für KI-Agenten
+# KPI Cards — a skill for AI agents
 
-Erzeugt Videos, in denen ein Raster aus Karten versetzt ins Bild fährt und in
-jeder Karte eine große Zahl hochzählt — ein Kennzahlen-Dashboard als Video.
-Dunkler Hintergrund, farbige Verläufe, grüne und rote Badges, stumm.
-Datenquelle ist eine CSV, eine Tabelle oder eine KI-Recherche.
+Builds KPI dashboard videos: cards slide in from below in a staggered wave, each
+big number counts up, a coloured badge shows the change and a sparkline sits at
+the bottom of the card. Dark navy, silent, about 4 to 6 seconds.
 
-Unter jeder Zahl stehen zwei optionale Zeilen: **was** die Zahl ist
-(„geschätzter Absatz weltweit") und **woher** sie kommt („Q2 2026 · IDC").
-Damit trägt das Format auch Zahlen, die ohne Einordnung irreführend wären.
+> **New here? Read SETUP.md** — step by step, no prior knowledge needed.
+> This is the short version.
 
-**Die Laufzeit ergibt sich aus der Kartenanzahl:** 6 Karten ≈ 4,3 s,
-9 Karten ≈ 4,9 s. Nichts einzustellen.
-
-Alle Beschriftungen, Einheiten, Zahlenformate und die Sprache stehen in
-`data.json` und sind frei änderbar.
-
-> **Neu hier? Lies ANLEITUNG.md** — Schritt für Schritt, ohne Vorkenntnisse.
-> Das hier ist die Kurzfassung.
-
-## Installieren
-
-Ordner entpacken, dann:
+## Install
 
 ```bash
-npx skills add /pfad/zu/kennzahlen-karten-skill --global --copy --all
+npx skills add AiBoris/video-skills@kennzahlen-karten --global --copy --all
 ```
 
-- `--copy` kopiert statt zu verlinken. Ohne das Flag geht der Skill kaputt,
-  sobald du diesen Ordner verschiebst oder löschst.
-- `--global` installiert für alle Projekte, nicht nur das aktuelle.
-- `--all` überspringt die Rückfragen.
+To get all seven skills instead, drop the `@kennzahlen-karten`. Restart your AI agent
+afterwards.
 
-Danach den KI-Agenten neu starten.
+- `--copy` copies instead of linking, `--global` installs for every project,
+  `--all` skips the prompts.
 
-Der Skill wird für alle gängigen KI-Agenten installiert — Claude Code, Codex,
-Cursor, Gemini, Goose, opencode, Roo, Windsurf und weitere.
+## Requirements
 
-## Voraussetzungen
-
-Node.js 22 oder neuer (`node --version`), FFmpeg (`ffmpeg -version`) und die
+Node.js 22 or newer (`node --version`), FFmpeg (`ffmpeg -version`) and the
 HyperFrames CLI:
 
 ```bash
@@ -46,47 +29,56 @@ brew install ffmpeg          # Mac; Windows: winget install ffmpeg
 npx skills add heygen-com/hyperframes --global --copy --all
 ```
 
-## Benutzen
+## Use it
 
-Sag deinem Agenten:
+Just tell your agent:
 
-> Mach mir ein Kennzahlen-Video aus dieser CSV: /pfad/zur/datei.csv
+> Make me a KPI video from these quarterly figures
 
-oder ohne eigene Daten:
+It asks for for your numbers — or researches them and shows you the table for approval, sets up the project and renders the MP4.
 
-> Mach mir ein Kennzahlen-Video zu den iPhone-17-Verkäufen im letzten Quartal
+## The trick
 
-Bei einem Thema recherchiert er die Zahlen und legt sie dir zur Freigabe vor,
-bevor er baut. Danach legt er das Projekt an und rendert das MP4.
+Six cards are six statements. If all six say the same thing in different units,
+you have built a dashboard, not a story.
 
-Wünsche kannst du direkt mitgeben:
+A good mix is three kinds: the **headline number**, a **comparison** (the same
+measure for another model, country or quarter), and a **context number** from a
+different dimension. **Four to six cards is the sweet spot** — three looks empty,
+past nine nobody reads everything in four seconds.
 
-> … als Hochformat für Instagram
-> … auf Englisch
-> … nur vier Karten, die anderen sind mir zu viel
+## Two lines under each number
 
-## Was drin ist
+`note` says **what** the number is (“estimated global units”). `meta` says
+**where it comes from** (“Q2 2026 · IDC”). Keeping them apart is what lets this
+format carry numbers that need explaining — and it is what keeps a derived figure
+from being read as a reported one.
 
-| Datei | |
-| --- | --- |
-| `SKILL.md` | Die Anleitung für den Agenten. |
-| `template/build.mjs` | Baut aus `data.json` die fertige HyperFrames-Komposition. Enthält alle an der Referenz vermessenen Design- und Timing-Werte. |
-| `template/csv-to-data.mjs` | Wandelt eine CSV in `data.json`. |
-| `template/data.example.json` | Beispieldatensatz mit allen Feldern. |
+## Any language
 
-## Formate
+Language is just content. Translate the labels, set `locale` (`en` → `16.6` and
+`1,200`; `de` → `16,6` and `1.200`) and translate the units in `suffix` along
+with them.
 
-`landscape` 1920×1080 · `portrait` 1080×1920 · `square` 1080×1080
+## Limits
 
-Das Raster richtet sich automatisch nach Format und Kartenanzahl; eine
-unvollständige letzte Reihe wird zentriert.
+- Runtime follows the card count: 6 cards ≈ 4.3 s, 9 cards ≈ 4.9 s
+- Three formats: 16:9, portrait, square
+- Six colours — from the seventh card on they repeat
+- All numbers share one type size, set by the longest one
+- The sparkline is decoration unless you supply real values in `trend`
+- No audio
 
-## Grenzen
+## What is in here
 
-- Vier bis sechs Karten lesen sich am besten, zwölf sind die Obergrenze.
-- Alle Zahlen teilen eine Schriftgröße, bestimmt von der längsten — eine sehr
-  lange Zahl verkleinert alle.
-- Der Verlauf am Kartenboden zeigt ohne eigene Zahlenreihe nur die Richtung, er
-  ist kein echtes Diagramm.
-- Kein Ton, keine Sprecherstimme, keine Bilder. Für Ranglisten über die Zeit ist
-  der Balken-Race-Skill das richtige Format.
+```
+SETUP.md                  setup for beginners
+SKILL.md                  instructions for the agent
+template/
+  build.mjs               generator + every measured style value
+  csv-to-data.mjs         CSV -> data.json
+  data.example.json       example data set
+```
+
+Every project gets its own copy of `build.mjs` and the assets, so a finished
+video still renders years later even if this skill is updated or removed.

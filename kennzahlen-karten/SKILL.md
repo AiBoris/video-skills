@@ -1,281 +1,277 @@
 ---
 name: kennzahlen-karten
-description: "Erzeugt ein Kennzahlen-Dashboard als Video: Karten fahren versetzt von unten ins Bild, die große Zahl in jeder Karte zählt hoch, ein farbiges Badge zeigt die Veränderung, ein Sparkline-Verlauf sitzt unten in der Karte. Dunkler Nachtblau-Hintergrund, sechs Farben, kein Ton, ca. 4-6 s. Nutze es, wenn jemand Zahlen als Übersicht im Video will: 'Kennzahlen-Video', 'KPI-Karten', 'Dashboard-Video', 'Zahlen-Karten', 'Metriken als Video', 'Quartalszahlen', 'Stat-Cards', 'KPI cards video', 'metrics dashboard video'. Alle Beschriftungen, Einheiten, Sprache und Zahlenformate stehen in data.json und sind frei änderbar. Nicht für Ranglisten über die Zeit (dafür Balken-Race), nicht für Sprecher-Videos oder Untertitel. Voraussetzung: HyperFrames CLI."
+description: "Builds a KPI dashboard as a video: cards slide in from below in a staggered wave, the big number in each card counts up, a coloured badge shows the change, and a sparkline sits at the bottom of the card. Dark navy background, six colours, no audio, about 4-6 s. Use it when someone wants numbers as an overview in a video: 'KPI cards video', 'metrics dashboard video', 'stat cards', 'quarterly figures video', 'numbers as video', 'Kennzahlen-Video', 'KPI-Karten', 'Dashboard-Video', 'Quartalszahlen'. All labels, units, language and number formats live in data.json and are freely changeable. Not for rankings over time (use balken-race for that), not for narrated videos or subtitles. Requires the HyperFrames CLI."
 ---
 
-# Kennzahlen-Karten
+# KPI Cards
 
-Ein Raster aus Karten auf dunklem Grund. Jede Karte trägt eine Beschriftung, ein
-Badge mit der Veränderung, eine große Zahl, die von 0 auf ihren Wert hochzählt,
-darunter zwei optionale Zeilen (was die Zahl ist, und aus welchem Zeitraum und
-welcher Quelle sie stammt) und einen farbigen Verlauf am unteren Rand. Die Karten
-kommen versetzt herein, danach steht das Bild still. Kein Ton, keine
-Sprecherstimme, keine Bilder.
+A grid of cards on a dark ground. Each card carries a label, a badge with the
+change, a big number counting from 0 up to its value, below that two optional
+lines (what the number is, and which period and source it comes from) and a
+coloured sparkline along the bottom edge. The cards arrive staggered, then the
+picture holds still. No audio, no narrator, no images.
 
-Design und Timing sind aus einer Referenzaufnahme vermessen und stecken fertig in
-`template/build.mjs`. Du lieferst nur Zahlen und Beschriftungen.
+Design and timing were measured off a reference clip and are baked into
+`template/build.mjs`. You only supply numbers and labels.
 
-**Die Laufzeit ergibt sich aus der Anzahl der Karten.** 6 Karten ≈ 4,3 s,
-9 Karten ≈ 4,9 s. Nichts einzustellen.
+**The runtime follows the card count.** 6 cards ≈ 4.3 s, 9 cards ≈ 4.9 s. Nothing
+to configure.
 
-## Voraussetzung zuerst prüfen
+## Check the requirement first
 
 ```bash
 npx hyperframes --version
 ```
 
-Schlägt das fehl, brich ab und sage dem User:
+If that fails, stop and tell the user:
 
-> Dieser Skill braucht die HyperFrames CLI. Installieren mit:
+> This skill needs the HyperFrames CLI. Install it with:
 > `npx skills add heygen-com/hyperframes --global --copy --all`
 
-Rate nicht daran vorbei und baue keinen Ersatz.
+Do not guess your way around it and do not build a substitute.
 
-## Schritt 1 — Zahlen beschaffen
+## Step 1 — Get the numbers
 
-Es gibt genau zwei Wege. Kläre zuerst, welcher gilt.
+There are exactly two routes. Establish which one applies first.
 
-### Weg A — der User hat Zahlen
+### Route A — the user has numbers
 
-CSV, Tabelle im Chat, Screenshot eines Dashboards. Nimm sie und geh zu Schritt 2.
+A CSV, a table in the chat, a screenshot of a dashboard. Take it and go to step 2.
 
-### Weg B — der User nennt nur ein Thema
+### Route B — the user only names a topic
 
-Dann recherchierst du die Zahlen selbst. Halte dich an vier Regeln:
+Then you research the numbers yourself. Four rules:
 
-1. **Nenne die Quelle** und den Zeitraum — im Untertitel und in der Fußzeile des
-   Videos, und im Chat.
-2. **Trenne Gemessenes von Geschätztem.** Wenn eine Zahl nicht berichtet wird und
-   du sie herleitest, gehört das Wort „geschätzt" in die `note` der Karte und die
-   Herleitung in ihre `meta` — nicht nur in die Fußzeile. Zahlen im Video sehen
-   wie Fakten aus, und falsche Zahlen fallen im Video niemandem auf.
-3. **Ein Zeitraum für alle Karten.** Zwei Karten aus verschiedenen Quartalen
-   nebeneinander lesen sich als dieselbe Momentaufnahme — das ist irreführend.
-   Geht es nicht anders, muss der Zeitraum in der Beschriftung stehen.
-4. **Lege dem User die Tabelle zur Freigabe vor, bevor du baust.**
+1. **Name the source** and the period — in the subtitle and the footnote of the
+   video, and in the chat.
+2. **Separate measured from estimated.** If a number is not reported and you
+   derive it, the word “estimated” belongs in the card's `note` and the
+   derivation in its `meta` — not only in the footnote. Numbers in a video look
+   like facts, and wrong numbers in a video are something nobody catches.
+3. **One period for all cards.** Two cards from different quarters sitting side
+   by side read as the same snapshot, which is misleading. If it cannot be
+   avoided, the period has to appear in the label.
+4. **Put the table in front of the user for approval before you build.**
 
-### Die Redaktionsregel — das Wichtigste an diesem Format
+### The editorial rule — the most important thing about this format
 
-Sechs Karten sind sechs Aussagen. Sind alle sechs dieselbe Aussage in anderen
-Einheiten, hast du ein Dashboard gebaut und keine Geschichte.
+Six cards are six statements. If all six are the same statement in different
+units, you have built a dashboard and not a story.
 
-Bevor du baust, prüf die Auswahl auf diese Frage:
+Before building, check the selection against this question:
 
-> **Sagt jede Karte etwas, das die anderen nicht schon sagen?**
+> **Does each card say something the others do not already say?**
 
-Eine gute Mischung sind drei Sorten Karten:
+A good mix is three kinds of card:
 
-- **Die Hauptzahl** — worum es geht, meist zuerst und mit dem stärksten Badge.
-- **Die Vergleichszahl** — dieselbe Größe für ein anderes Modell, Land, Quartal.
-- **Die Kontextzahl** — etwas aus einer anderen Dimension, das die Hauptzahl
-  einordnet (Umsatz neben Stückzahlen, Nutzer neben Umsatz).
+- **The headline number** — what this is about, usually first and with the
+  strongest badge.
+- **The comparison** — the same measure for another model, country or quarter.
+- **The context number** — something from a different dimension that puts the
+  headline in proportion (revenue next to units, users next to revenue).
 
-**Vier bis sechs Karten sind das Optimum.** Bei drei wirkt das Raster leer, ab
-neun liest niemand mehr alles in vier Sekunden. Hat der User mehr Zahlen, frag,
-welche die wichtigsten sind, statt alle hineinzuquetschen.
+**Four to six cards is the sweet spot.** At three the grid looks empty; past nine
+nobody reads everything in four seconds. If the user has more numbers, ask which
+are the most important rather than cramming them all in.
 
-## Schritt 2 — Projekt anlegen
+## Step 2 — Set up the project
 
-`<projekt>` ist ein kurzer kebab-case-Name aus dem Thema.
-
-```bash
-npx hyperframes init videos/<projekt> --non-interactive --example=blank
-cp <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/csv-to-data.mjs videos/<projekt>/
-```
-
-Kopiere die Skripte **immer ins Projekt**. Führe sie nie aus dem Skill-Ordner
-heraus aus: Das fertige Videoprojekt muss auch dann noch rendern, wenn dieser
-Skill aktualisiert oder deinstalliert wird.
-
-## Schritt 3 — Zahlen in `data.json` bringen
-
-### Aus einer CSV
+`<project>` is a short kebab-case name derived from the topic.
 
 ```bash
-cd videos/<projekt>
-node csv-to-data.mjs /pfad/zur/datei.csv data.json
+npx hyperframes init videos/<project> --non-interactive --example=blank
+cp <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/csv-to-data.mjs videos/<project>/
 ```
 
-Erwartet wird eine Kopfzeile. Nur `label` und `value` sind Pflicht:
+Always copy the scripts **into the project**. Never run them out of the skill
+folder: the finished video project has to keep rendering even if this skill is
+later updated or uninstalled.
+
+## Step 3 — Get the numbers into `data.json`
+
+### From a CSV
+
+```bash
+cd videos/<project>
+node csv-to-data.mjs /path/to/file.csv data.json
+```
+
+It expects a header row. Only `label` and `value` are required:
 
 ```
 label;value;suffix;delta;tone
-iPhone 17;16,6; Mio.;6 % Weltmarkt;up
-iPhone 17 Pro Max;12,4; Mio.;Rang 2;flat
+iPhone 17;16.6; M;6 % world share;up
+iPhone 17 Pro Max;12.4; M;rank 2;flat
 ```
 
-Deutsche Spaltennamen (`Beschriftung`, `Wert`, `Einheit`, `Delta`, `Trend`,
-`Farbe`) werden genauso erkannt, ebenso Semikolon oder Komma als Trenner,
-deutsche Dezimalkommas und Tausenderpunkte.
+German column names (`Beschriftung`, `Wert`, `Einheit`, `Delta`, `Trend`,
+`Farbe`) are recognised too, as are semicolon or comma separators and German
+decimal commas and thousands dots.
 
-Danach `title`, `subtitle` und `footnote` ausfüllen — der Konverter schreibt dort
-`TODO` hinein.
+Afterwards fill in `title`, `subtitle` and `footnote` — the converter writes
+`TODO` there.
 
-### Von Hand
+### By hand
 
 ```json
 {
-  "title": "iPhone 17 in Zahlen",
-  "subtitle": "Zweites Quartal 2026 · Absatz, Umsatz, Ökosystem",
-  "footnote": "Quelle: Counterpoint Research, Apple Q3/FY2026",
+  "title": "iPhone 17 in numbers",
+  "subtitle": "Second quarter 2026 · units, revenue, ecosystem",
+  "footnote": "Source: Counterpoint Research, Apple Q3/FY2026",
   "metrics": [
     {
       "label": "iPhone 17",
       "value": 16.6,
-      "suffix": " Mio.",
+      "suffix": " M",
       "decimals": 1,
-      "note": "geschätzter Absatz weltweit",
-      "meta": "Q2 2026 · aus 6 % Marktanteil abgeleitet",
+      "note": "estimated global units",
+      "meta": "Q2 2026 · derived from 6 % market share",
       "trend": "up"
     },
     {
-      "label": "iPhone-Umsatz",
+      "label": "iPhone revenue",
       "value": 54.3,
-      "suffix": " Mrd. $",
+      "suffix": " bn $",
       "decimals": 1,
       "delta": "22 %",
       "deltaTone": "up",
-      "note": "Apple iPhone-Segment",
-      "meta": "Apple Q3/FY2026 (Kalender-Q2) · ggü. Vorjahr"
+      "note": "Apple iPhone segment",
+      "meta": "Apple Q3/FY2026 (calendar Q2) · year over year"
     }
   ],
-  "options": { "format": "landscape", "locale": "de" }
+  "options": { "format": "landscape", "locale": "en" }
 }
 ```
 
-| Feld | |
+| Field | |
 | --- | --- |
-| `title` | Überschrift oben links. Kurz halten. |
-| `subtitle` | Zeitraum, Einheit, Quelle. Weglassbar. |
-| `footnote` | Kleine Zeile am unteren Bildrand, blendet zuletzt ein. Der Platz für Quellen und Schätzungen. Weglassbar. |
-| `metrics[].label` | Was die Zahl ist. Wird bei Überlänge abgeschnitten — `build.mjs` warnt. |
-| `metrics[].value` | **Zahl** → zählt von 0 hoch. **Text** → steht von Anfang an still. |
-| `metrics[].prefix` | Vor die Zahl, z. B. `"$"`. |
-| `metrics[].suffix` | Hinter die Zahl, mit führendem Leerzeichen: `" Mio."`, `" %"`, `" Mrd. $"`. |
-| `metrics[].decimals` | Nachkommastellen. Standard: 1 bei Kommazahlen, 0 bei ganzen. |
-| `metrics[].note` | Zeile unter der Zahl: **was** die Zahl ist. Weglassbar. |
-| `metrics[].meta` | Zeile darunter, kleiner und dunkler: **woher** die Zahl kommt — Zeitraum, Quelle, Vergleichsbasis. Weglassbar. |
-| `metrics[].delta` | Text im Badge oben rechts, z. B. `"22 %"`, `"Rang 2"`, `"150 Mio."`. Weglassbar. |
-| `metrics[].deltaTone` | `up` grün mit ▲, `down` rot mit ▼, `flat` grau ohne Pfeil. Ohne Angabe aus dem Vorzeichen von `delta` erraten. |
-| `metrics[].trend` | Form des Verlaufs unten: `"up"`, `"down"`, `"flat"` (waagerecht), `"none"` (kein Verlauf) oder eine eigene Zahlenreihe wie `[3, 5, 4, 9]`. Standard folgt `deltaTone`. |
-| `metrics[].color` | `indigo`, `cyan`, `amber`, `emerald`, `pink`, `violet` oder Hex. Standard: Reihenfolge der Palette. |
+| `title` | Heading, top left. Keep it short. |
+| `subtitle` | Period, unit, source. Optional. |
+| `footnote` | Small line at the bottom edge, fading in last. The place for sources and estimates. Optional. |
+| `metrics[].label` | What the number is. Truncated when too long — `build.mjs` warns. |
+| `metrics[].value` | **Number** → counts up from 0. **Text** → stands still from the start. |
+| `metrics[].prefix` | Before the number, e.g. `"$"`. |
+| `metrics[].suffix` | After the number, with a leading space: `" M"`, `" %"`, `" bn $"`. |
+| `metrics[].decimals` | Decimal places. Default: 1 for decimals, 0 for integers. |
+| `metrics[].note` | Line under the number: **what** the number is. Optional. |
+| `metrics[].meta` | Line below that, smaller and dimmer: **where** the number comes from — period, source, comparison basis. Optional. |
+| `metrics[].delta` | Text in the badge top right, e.g. `"22 %"`, `"rank 2"`, `"150 M"`. Optional. |
+| `metrics[].deltaTone` | `up` green with ▲, `down` red with ▼, `flat` grey with no arrow. Guessed from the sign of `delta` when omitted. |
+| `metrics[].trend` | Shape of the sparkline: `"up"`, `"down"`, `"flat"` (level), `"none"` (no sparkline) or your own series like `[3, 5, 4, 9]`. Defaults to `deltaTone`. |
+| `metrics[].color` | `indigo`, `cyan`, `amber`, `emerald`, `pink`, `violet` or hex. Default: palette order. |
 
-### Die zwei Zeilen unter der Zahl
+### The two lines under the number
 
-`note` und `meta` sind der Grund, warum dieses Format Zahlen tragen kann, die
-Erklärung brauchen. Trenne sie strikt:
+`note` and `meta` are the reason this format can carry numbers that need
+explaining. Keep them strictly apart:
 
-- **`note` sagt, was die Zahl ist.** „geschätzter Absatz weltweit",
-  „weltweite Smartphone-Auslieferungen", „Aufrufe deiner Beiträge".
-- **`meta` sagt, woher sie kommt.** Zeitraum, Quelle, Vergleichsbasis:
-  „Q2 2026 · IDC", „7 Tage · ggü. Vorwoche".
+- **`note` says what the number is.** “estimated global units”, “worldwide
+  smartphone shipments”, “views on your posts”.
+- **`meta` says where it comes from.** Period, source, comparison basis:
+  “Q2 2026 · IDC”, “7 days · vs. previous week”.
 
-Drei Regeln, die den Unterschied zwischen belastbar und irreführend machen:
+Three rules that make the difference between solid and misleading:
 
-1. **Schreib die Rechenart in `note`, nicht in die Fußzeile.** Eine abgeleitete
-   Zahl heißt „geschätzter Absatz", nie „verkaufte Geräte". Wer sie im Video
-   liest, sieht die Fußzeile nicht.
-2. **Nimm den Fachbegriff der Quelle.** IDC misst *Auslieferungen* (Shipments),
-   Counterpoint misst *Verkäufe* (Sell-through). Die Wörter sind nicht
-   austauschbar, und die falsche Wahl ist ein sachlicher Fehler.
-3. **Nenne den Zeitraum so, wie ihn der Leser prüfen kann.** Bei Firmen mit
-   abweichendem Geschäftsjahr beide Bezeichnungen:
-   „Apple Q3/FY2026 (Kalender-Q2)".
+1. **Put the method in `note`, not in the footnote.** A derived number is
+   “estimated units”, never “devices sold”. Whoever reads it in the video does
+   not see the footnote.
+2. **Use the source's own term.** IDC measures *shipments*, Counterpoint measures
+   *sell-through*. The words are not interchangeable, and picking the wrong one
+   is a factual error.
+3. **State the period the way a reader can verify it.** For companies with an
+   offset fiscal year, give both: “Apple Q3/FY2026 (calendar Q2)”.
 
-Beide Zeilen werden **nicht umgebrochen**, sondern bei Überlänge abgeschnitten —
-`build.mjs` warnt vorher. Sobald eine Karte `note` oder `meta` hat, reserviert
-jede Karte diese Zeile, damit alle Zahlen auf einer Grundlinie stehen.
+Neither line **wraps** — they are truncated when too long, and `build.mjs` warns
+beforehand. As soon as one card has a `note` or `meta`, every card reserves that
+line so all the numbers sit on one baseline.
 
-### Optionen
+### Options
 
-| Option | Standard | |
+| Option | Default | |
 | --- | --- | --- |
 | `format` | `landscape` | `landscape` 1920×1080, `portrait` 1080×1920, `square` 1080×1080 |
-| `columns` | aus Kartenanzahl | Spalten im Raster. Eine unvollständige letzte Reihe wird zentriert. |
-| `locale` | `de` | `de` → `16,6` und `1.200`. `en` → `16.6` und `1,200`. |
-| `decimalSep` / `groupSep` | aus `locale` | Einzeln überschreibbar. `"groupSep": ""` schaltet die Tausendertrennung ab. |
-| `lang` | aus `locale` | `lang`-Attribut des Dokuments, wichtig für die Silbentrennung fremder Sprachen. |
-| `stagger` | 0,21 | Abstand zwischen zwei Karteneinsätzen. |
-| `count` | 1,53 | Wie lange eine Zahl hochzählt. |
-| `hold` | 1,4 | Standzeit auf dem Endstand. |
-| `cardAspect` | 0,62 | Kartenhöhe als Anteil der Kartenbreite. |
+| `columns` | from the card count | Grid columns. An incomplete last row is centred. |
+| `locale` | `de` | `de` → `16,6` and `1.200`. `en` → `16.6` and `1,200`. **Set `"locale": "en"` for English videos** — the default is German. |
+| `decimalSep` / `groupSep` | from `locale` | Overridable individually. `"groupSep": ""` turns thousands separators off. |
+| `lang` | from `locale` | The document's `lang` attribute, which matters for hyphenation in other languages. |
+| `stagger` | 0.21 | Gap between two card entrances. |
+| `count` | 1.53 | How long a number counts up. |
+| `hold` | 1.4 | How long the final state holds. |
+| `cardAspect` | 0.62 | Card height as a share of card width. |
 
-## Andere Sprache
+## Another language
 
-Sprache ist nur Inhalt: `title`, `subtitle`, `footnote`, `label` und `delta`
-übersetzen, `locale` passend setzen (`en` für englische Zahlenschreibweise), und
-die Einheiten in `suffix` mit übersetzen — `" Mio."` wird `" M"` oder
-`" million"`, `" Mrd. $"` wird `" bn $"`.
+Language is only content: translate `title`, `subtitle`, `footnote`, `label` and
+`delta`, set `locale` to match (`en` for English number formatting), and
+translate the units in `suffix` along with them — `" Mio."` becomes `" M"` or
+`" million"`, `" Mrd. $"` becomes `" bn $"`.
 
-Für zwei Sprachfassungen desselben Videos legst du `data.de.json` und
-`data.en.json` an und baust zweimal:
+For two language versions of the same video, create `data.de.json` and
+`data.en.json` and build twice:
 
 ```bash
 node build.mjs data.de.json && npx hyperframes render . -o ./renders/de.mp4
 node build.mjs data.en.json && npx hyperframes render . -o ./renders/en.mp4
 ```
 
-## Schritt 4 — Bauen, prüfen, rendern
+## Step 4 — Build, check, render
 
 ```bash
-cd videos/<projekt>
+cd videos/<project>
 node build.mjs data.json
 npx hyperframes check .
 npx hyperframes render . -q high -o ./renders/video.mp4
 ```
 
-`build.mjs` gibt Raster, Kartengröße und Laufzeit aus und **warnt**, wenn eine
-Beschriftung nicht in ihre Karte passt oder die Zahlen verkleinert werden
-mussten. Nimm die Warnungen ernst: Beide bedeuten, dass der Text im Video
-gestaucht oder abgeschnitten aussieht.
+`build.mjs` prints the grid, card size and runtime, and **warns** when a label
+does not fit its card or the numbers had to be scaled down. Take the warnings
+seriously: both mean the text looks squashed or truncated in the video.
 
-Häufigster Fall: `! Label "..." ist zu lang`. Kürze die Beschriftung, statt die
-Schriftgröße zu drücken — `App-Downloads` statt `App-Store-Downloads pro Jahr`,
-der Rest gehört in `subtitle` oder `footnote`.
+The most common case: `! Label "..." is too long`. Shorten the label rather than
+forcing the type size down — `App downloads` instead of
+`App Store downloads per year`; the rest belongs in `subtitle` or `footnote`.
 
-## Was du nicht anfassen solltest
+## What not to touch
 
-Der `STYLE`-Block in `build.mjs` enthält die an der Referenz vermessenen Werte:
-Hintergrundverlauf, Kartenfüllung und -rand, alle Schriftgrößen als Verhältnis
-zur Kartenbreite, die Badge-Farben und das komplette Timing. Jede Zeile trägt im
-Kommentar, woraus sie gemessen wurde.
+The `STYLE` block in `build.mjs` holds the values measured off the reference:
+background gradient, card fill and border, every type size as a ratio of the card
+width, the badge colours and the complete timing. Every line carries a comment
+saying what it was measured from.
 
-Drei Dinge sind besonders empfindlich:
+Three things are especially delicate:
 
-- **Der Hochzähler läuft linear** (`ease: "none"`), nicht mit Ease-out. Das ist
-  gemessen: In der Referenz steigt die Zahl mit konstanter Rate (83,8 Einheiten
-  pro Sekunde bei Zielwert 128,4) und klemmt dann auf dem Zielwert. Ein Ease-out
-  lässt die letzten Stellen kriechen und die Karte fertig aussehen, bevor sie es
-  ist.
-- **`stagger: 0.21`** ist der Abstand, bei dem die Karten als eine Welle laufen.
-  Deutlich kleiner wirkt es wie ein gleichzeitiges Aufblitzen, deutlich größer
-  wie sechs einzelne Einblendungen.
-- **Der Hintergrund ist ein einziger, weit auslaufender Verlauf** von der oberen
-  Bildkante. Ein stärkerer oder mittig gesetzter Verlauf erzeugt sichtbare Ringe
-  (8-Bit-Banding) auf der großen leeren Fläche.
+- **The counter runs linearly** (`ease: "none"`), not with an ease-out. That was
+  measured: in the reference the number rises at a constant rate (83.8 units per
+  second toward a target of 128.4) and then clamps. An ease-out makes the last
+  digits crawl and the card look finished before it is.
+- **`stagger: 0.21`** is the spacing at which the cards read as one wave. Much
+  smaller and it looks like a simultaneous flash; much larger and it looks like
+  six separate fade-ins.
+- **The background is a single, far-reaching gradient** from the top edge. A
+  stronger or centred gradient produces visible rings (8-bit banding) across the
+  large empty area.
 
-Ändere daran nur, was der User ausdrücklich verlangt.
+Change only what the user explicitly asks for.
 
-## Grenzen, die du kennen solltest
+## Limits you should know about
 
-- **Ab sieben Karten wiederholen sich die Farben.** Die Palette hat sechs Farben,
-  wie die Referenz. Setz `color` gezielt, wenn zwei gleichfarbige Karten
-  nebeneinander liegen.
-- **Alle Zahlen teilen eine Schriftgröße**, bestimmt von der längsten. Eine
-  einzige lange Zahl (`"1.284.500 Stück"`) verkleinert also alle sechs. Kürze sie
-  über die Einheit (`1,28 Mio. Stück`).
-- **`note` und `meta` kosten die Zahl Größe.** Mit beiden Zeilen schrumpft die
-  Zahl in einem 3×2-Raster von rund 75 auf 61 px, weil die Karte nur so hoch
-  werden kann, wie das Raster zulässt. Der Verlauf gibt zuerst Höhe ab, danach
-  die Zahl. `build.mjs` sagt beides an.
-- **Der Verlauf unten ist Dekoration, kein Diagramm.** Ohne eigene Zahlenreihe in
-  `trend` ist seine Form erfunden und zeigt nur die Richtung. Braucht der User
-  einen echten Verlauf, gib `trend` als Zahlenreihe mit — oder nimm ein
-  Diagrammformat.
-- **Negative Werte zählen von 0 nach unten.** Das funktioniert, sieht aber nur
-  bei einer einzelnen negativen Karte gut aus.
+- **From the seventh card on, colours repeat.** The palette has six colours, like
+  the reference. Set `color` deliberately when two identically coloured cards end
+  up adjacent.
+- **All numbers share one type size**, set by the longest one. A single long
+  number (`"1,284,500 units"`) therefore shrinks all six. Shorten it via the unit
+  (`1.28 M units`).
+- **`note` and `meta` cost the number size.** With both lines the number in a 3×2
+  grid shrinks from roughly 75 to 61 px, because the card can only grow as tall
+  as the grid allows. The sparkline gives up height first, then the number.
+  `build.mjs` reports both.
+- **The sparkline is decoration, not a chart.** Without your own series in
+  `trend` its shape is invented and only indicates direction. If the user needs a
+  real trend line, pass `trend` as a series of numbers — or use a chart format.
+- **Negative values count from 0 downwards.** That works, but only looks good
+  with a single negative card.
 
-## Danach
+## Afterwards
 
-Zeig dem User das gerenderte MP4. Für einen weiteren Datensatz im selben Stil
-reicht es, `data.json` zu ändern und `node build.mjs` erneut laufen zu lassen.
+Show the user the rendered MP4. For another data set in the same style it is
+enough to change `data.json` and run `node build.mjs` again.

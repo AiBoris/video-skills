@@ -107,10 +107,11 @@ const MAX_INTRO_LINES = 2;
 const WARN_WORDS = 18;
 
 // A shortened quote that leans on a pronoun has lost the noun it referred to.
-// "Er hat mir geholfen" points at nobody once the first sentence is cut away, and
-// so does "Mit X hat er ..." in the middle of a cut. Both need the name put back.
+// "He helped me" points at nobody once the first sentence is cut away, and so
+// does "Working with X, he ..." in the middle of a cut. Both need the name back.
+// German and English pronouns, because reviews come in either language.
 const PRONOUN =
-  /^(er|ihn|ihm|sein|seine|seinem|seinen|seiner|sie|ihr|ihre|ihrem|ihren|ihrer|dessen|deren)$/i;
+  /^(er|ihn|ihm|sein|seine|seinem|seinen|seiner|sie|ihr|ihre|ihrem|ihren|ihrer|dessen|deren|he|him|his|she|her|hers|they|them|their|theirs)$/i;
 
 // ------------------------------------------------------------- helpers ----
 const fail = (msg) => {
@@ -287,10 +288,10 @@ if (data.intro) {
   const headline =
     data.intro.headline ||
     (kind === "person"
-      ? "Das sagen **meine Kunden**"
-      : "Das sagen **unsere Kunden**");
+      ? "What **my clients** say"
+      : "What **our clients** say");
   const words = parseQuote(headline, "intro");
-  requireFocus(words, "intro", '"Das sagen **unsere Kunden**".');
+  requireFocus(words, "intro", '"What **our clients** say".');
 
   const base = r2(S.quote * STYLE.introSize);
   const fitted = fitText(plainOf(words), base, INTRO_BOX, MAX_INTRO_LINES);
@@ -322,12 +323,12 @@ items.forEach((item, i) => {
   const words = parseQuote(item.quote, where);
   // The focus text is the point of this format: a card without one is a wall of
   // grey words that the eye slides off. Refuse to build rather than ship that.
-  requireFocus(words, where, '"hat uns **drei Wochen Arbeit** gespart".');
+  requireFocus(words, where, '"saved us **three weeks of work**".');
 
   const plain = plainOf(words);
 
   // Pronouns whose antecedent the cut removed. If the quote never names the
-  // subject, every "er"/"sein" in it points at nobody.
+  // subject, every "he"/"his" in it points at nobody.
   const bare = (w) => w.replace(/[^\p{L}]/gu, "");
   const tokens = plain.split(/\s+/).map(bare).filter(Boolean);
   const namesSubject =
@@ -339,7 +340,7 @@ items.forEach((item, i) => {
       `${where}: the quote says "${orphan[0]}" but never names ` +
         (subject ? `${subject}` : "the subject") +
         `. The cut took the antecedent with it — put the name back, ` +
-        `e.g. "${subject || "Name"} hat …".`
+        `e.g. "${subject || "Name"} helped me …".`
     );
 
   if (words.length > WARN_WORDS)
@@ -442,12 +443,12 @@ if (outro) {
     (noTotal
       ? ""
       : list.length > 1
-        ? `aus **${count} Bewertungen** auf ${list.length} Plattformen`
+        ? `from **${count} reviews** on ${list.length} platforms`
         : count
-          ? `aus **${count} Bewertungen**${src ? ` auf ${src}` : ""}`
-          : `**${src || "Bewertungen"}**`);
+          ? `from **${count} reviews**${src ? ` on ${src}` : ""}`
+          : `**${src || "reviews"}**`);
   const words = line ? parseQuote(line, "outro") : [];
-  if (line) requireFocus(words, "outro", '"aus **128 Bewertungen** auf Google".');
+  if (line) requireFocus(words, "outro", '"from **128 reviews** on Google".');
 
   const size = r2(S.quote * 0.82);
   const fitted = line

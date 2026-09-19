@@ -1,129 +1,129 @@
 ---
 name: radar-sweep
-description: "Erzeugt ein Radar-Video: eine grün leuchtende Radarscheibe mit Ringen, Skala und Fadenkreuz baut sich auf, ein Suchstrahl dreht sich mit nachziehendem Schweif darüber und lässt bernsteinfarbene Kontakte kurz aufblitzen, während oben links eine Überschrift steht und unten rechts Koordinaten mitlaufen. Dunkel, technisch, stumm, 4-12 s. Nutze es, wenn jemand Suchen, Aufspüren, Scannen oder Beobachten als Video will: 'Radar-Video', 'Radar-Animation', 'wir finden X', 'Sonar', 'Scan-Animation', 'Zielsuche', 'Monitoring-Video', 'Recruiting-Hook', 'radar sweep video'. Kann eine Serie bauen: eine Namensliste ergibt pro Name ein eigenes Video mit identischem Bild. Nicht für Landkarten mit echten Orten, Balken- oder Tortendiagramme oder Sprecher-Videos. Voraussetzung: HyperFrames CLI."
+description: "Builds a radar video: a glowing radar dish with rings, tick scale and crosshair boots up, a search beam sweeps across it with a trailing wake and makes amber contacts flash briefly, while a headline sits top left and coordinates tick along bottom right. Dark, technical, silent, 4-12 s. Use it when someone wants searching, tracking, scanning or watching as a video: 'radar video', 'radar sweep video', 'radar animation', 'sonar', 'scan animation', 'we find X', 'monitoring video', 'recruiting hook', 'Radar-Video', 'Zielsuche', 'Scan-Animation'. Can build a series: a list of names gives one video per name with an identical picture. Not for maps with real places, bar or pie charts, or narrated videos. Requires the HyperFrames CLI."
 ---
 
-# Radar-Sweep
+# Radar Sweep
 
-Eine Radarscheibe im Dunkeln. Ringe springen von innen nach außen auf, der
-Suchstrahl beginnt zu kreisen und zieht einen verblassenden Schweif hinter sich
-her, Kontakte leuchten bernsteinfarben auf, wenn der Strahl über sie streicht,
-und dimmen danach langsam weg. Oben links eine Überschrift, unten rechts
-mitlaufende Koordinaten. Am Ende blendet alles weg.
+A radar dish in the dark. Rings snap open from the inside out, the search beam
+starts to circle and drags a fading wake behind it, contacts flash amber as the
+beam brushes over them and dim away afterwards. A headline top left, running
+coordinates bottom right. At the end everything fades out.
 
-Kein Ton, keine Sprecherstimme, kein Schnitt.
+No audio, no narrator, no cuts.
 
-Geometrie, Federn und Timing sind aus einer gerenderten Referenz ausgelesen und
-stecken fertig in `template/build.mjs`. Du schreibst nur die Überschrift.
+Geometry, springs and timing were read out of a rendered reference and are baked
+into `template/build.mjs`. You only write the headline.
 
-## Voraussetzung zuerst prüfen
+## Check the requirement first
 
 ```bash
 npx hyperframes --version
 ```
 
-Schlägt das fehl, brich ab und sage dem User:
+If that fails, stop and tell the user:
 
-> Dieser Skill braucht die HyperFrames CLI. Installieren mit:
-> `npx skills add heygen-com/hyperframes`
+> This skill needs the HyperFrames CLI. Install it with:
+> `npx skills add heygen-com/hyperframes --global --copy --all`
 
-Rate nicht daran vorbei und baue keinen Ersatz.
+Do not guess your way around it and do not build a substitute.
 
-## Schritt 1 — Die Überschrift klären
+## Step 1 — Settle the headline
 
-Frage den User nach der **Überschrift**. Sie wird in Großbuchstaben gesetzt und
-steht oben links über der Scheibe.
+Ask the user for the **headline**. It is set in uppercase and sits top left above
+the dish.
 
-### Die Redaktionsregel
+### The editorial rule
 
-Das Bild behauptet: *hier wird gesucht, und es wird gefunden.* Die Überschrift
-muss diese Behauptung einlösen, sonst ist das Radar bloß Dekoration.
+The picture makes a claim: *something is being searched for here, and it is being
+found.* The headline has to deliver on that claim, or the radar is just
+decoration.
 
-- Gut: `Wir finden Fachkräfte für Nexora Automation`
-- Gut: `47 Wettbewerber. Einer wächst schneller als du.`
-- Tot: `Willkommen bei der Nexora Automation GmbH`
+- Good: `We find engineers for Nexora Automation`
+- Good: `47 competitors. One is growing faster than you.`
+- Dead: `Welcome to Nexora Automation Inc.`
 
-Am stärksten wird es, wenn die Überschrift den **Namen des Empfängers** trägt —
-dann sieht er sich selbst im Fadenkreuz. Genau dafür gibt es die Serie in
-Schritt 3.
+It lands hardest when the headline carries the **recipient's own name** — then
+they see themselves in the crosshairs. That is exactly what the series in step 3
+is for.
 
-### Harte Grenzen
+### Hard limits
 
-- **Maximal drei Zeilen**, sonst läuft die Überschrift in die Scheibe.
-  `build.mjs` rechnet die Zeichengrenze für Format und Schriftgröße aus und
-  warnt. Nimm die Warnung ernst oder setz `titleSize` kleiner.
-- Der Untertitel ist eine einzelne kurze Zeile in Versalien und Monospace
-  (`GRID REF 34-B // ACTIVE`). Er soll wie ein Statusfeld wirken, nicht wie ein
-  zweiter Satz. Leer lassen geht auch.
+- **Three lines at most**, or the headline runs into the dish. `build.mjs`
+  computes the character limit for the format and type size and warns. Take the
+  warning seriously or set a smaller `titleSize`.
+- The subtitle is a single short line in caps and monospace
+  (`GRID REF 34-B // ACTIVE`). It should read like a status field, not like a
+  second sentence. Leaving it empty is fine.
 
-## Schritt 2 — Look festlegen
+## Step 2 — Settle the look
 
-Fragen, die du nur stellst, wenn der User nichts dazu gesagt hat.
+Only ask these if the user has not already said.
 
-| Feld        | Voreinstellung | Alternativen                                  |
-| ----------- | -------------- | --------------------------------------------- |
-| `format`    | `16:9`         | `9:16`, `1:1`, `4:5`                          |
-| `preset`    | `gruen`        | `bernstein`, `blau`, `rot`                    |
-| `duration`  | `6`            | 3 bis 20 Sekunden                             |
-| `blips`     | `9`            | 1 bis 24 Kontakte                             |
-| `crosshair` | `true`         | `false` — ohne Fadenkreuz                     |
-| `scanlines` | `true`         | `false` — ohne CRT-Zeilen                     |
+| Field       | Default | Alternatives                              |
+| ----------- | ------- | ----------------------------------------- |
+| `format`    | `16:9`  | `9:16`, `1:1`, `4:5`                      |
+| `preset`    | `gruen` | `bernstein`, `blau`, `rot`                |
+| `duration`  | `6`     | 3 to 20 seconds                           |
+| `blips`     | `9`     | 1 to 24 contacts                          |
+| `crosshair` | `true`  | `false` — no crosshair                    |
+| `scanlines` | `true`  | `false` — no CRT lines                    |
 
-`gruen` ist die Referenz: Signalgrün auf Fast-Schwarz, bernsteinfarbene
-Kontakte. Nimm sie im Zweifel.
+`gruen` is the reference: signal green on near-black with amber contacts. Take it
+when in doubt.
 
-Einzelne Farben lassen sich über `colors` überschreiben, etwa
-`"colors": { "blip": "#ff6b4a" }`. Nur tun, wenn der User es verlangt — die
-vier Presets sind aufeinander abgestimmt.
+Individual colours can be overridden through `colors`, e.g.
+`"colors": { "blip": "#ff6b4a" }`. Only do that when the user asks — the four
+presets are tuned as sets.
 
-### Was die Laufzeit tut
+### What the runtime does
 
-Der Strahl braucht **110 Frames für eine Umdrehung**, also gut 3,7 Sekunden.
-Die Voreinstellung von 6 s ergibt knapp anderthalb Umdrehungen: genug, damit
-jeder Kontakt einmal aufleuchtet, kurz genug für einen Hook. 8 s ergibt zwei
-volle Umdrehungen. `build.mjs` gibt die Zahl der Umdrehungen aus.
+The beam needs **110 frames for one revolution**, a little over 3.7 seconds. The
+default of 6 s gives not quite one and a half revolutions: enough for every
+contact to flash once, short enough for a hook. 8 s gives two full revolutions.
+`build.mjs` prints the number of sweeps.
 
-Unter 5 s schafft der Strahl keine volle Runde — dann bleiben Kontakte dunkel.
-Das kann gewollt sein, ist aber meist ein Versehen.
+Below 5 s the beam never completes a full turn and some contacts stay dark. That
+can be intentional, but it is usually an oversight.
 
-## Schritt 3 — Serie oder Einzelstück
+## Step 3 — Series or single video
 
-`title` darf den Platzhalter `{name}` enthalten. Steht in `names` eine Liste,
-baut `node build.mjs <index>` daraus je ein Video — gleiche Scheibe, gleiche
-Kontakte, gleiche Bewegung, nur ein anderer Name.
+`title` may contain the placeholder `{name}`. If `names` holds a list,
+`node build.mjs <index>` builds one video per entry — same dish, same contacts,
+same motion, only a different name.
 
-Das ist der eigentliche Zweck des Formats: personalisierte Erstkontakt-Videos.
+That is the actual purpose of the format: personalised first-contact videos.
 
 ```json
 {
-  "title": "Wir finden Fachkräfte für {name}",
-  "names": ["Nexora Automation GmbH", "Veltrix Systems GmbH"]
+  "title": "We find engineers for {name}",
+  "names": ["Nexora Automation", "Veltrix Systems"]
 }
 ```
 
-Ohne `names` wird `title` unverändert gesetzt; ein `{name}` darin fällt weg.
+Without `names`, `title` is used unchanged and a `{name}` in it is dropped.
 
-## Schritt 4 — Projekt anlegen
+## Step 4 — Set up the project
 
-`<projekt>` ist ein kurzer kebab-case-Name aus dem Thema.
+`<project>` is a short kebab-case name derived from the topic.
 
 ```bash
-npx hyperframes init videos/<projekt> --non-interactive --example=blank
-cp -R <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/content.json <SKILL_DIR>/template/assets videos/<projekt>/
+npx hyperframes init videos/<project> --non-interactive --example=blank
+cp -R <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/content.json <SKILL_DIR>/template/assets videos/<project>/
 ```
 
-Kopiere `build.mjs` und `assets/` **immer ins Projekt**. Führe sie nie aus dem
-Skill-Ordner heraus aus: Das fertige Videoprojekt muss auch dann noch rendern,
-wenn dieser Skill aktualisiert oder deinstalliert wird.
+Always copy `build.mjs` and `assets/` **into the project**. Never run them out of
+the skill folder: the finished video project has to keep rendering even if this
+skill is later updated or uninstalled.
 
-## Schritt 5 — Inhalt schreiben
+## Step 5 — Write the content
 
-`videos/<projekt>/content.json`:
+`videos/<project>/content.json`:
 
 ```json
 {
-  "title": "Wir finden Fachkräfte für {name}",
-  "names": ["Nexora Automation GmbH"],
+  "title": "We find engineers for {name}",
+  "names": ["Nexora Automation"],
   "subtitle": "GRID REF 34-B // ACTIVE",
   "format": "16:9",
   "duration": 6,
@@ -134,51 +134,50 @@ wenn dieser Skill aktualisiert oder deinstalliert wird.
 }
 ```
 
-## Schritt 6 — Bauen, prüfen, rendern
+## Step 6 — Build, check, render
 
 ```bash
-cd videos/<projekt>
+cd videos/<project>
 node build.mjs
 npx hyperframes check .
 npx hyperframes render . -q high -o ./renders/video.mp4
 ```
 
-Für eine Serie einmal pro Name:
+For a series, once per name:
 
 ```bash
 for i in 0 1 2; do node build.mjs $i && npx hyperframes render . -q high -o ./renders/version-$i.mp4; done
 ```
 
-`build.mjs` schreibt zwei Dateien: `index.html` (die Hülle mit der Laufzeit) und
-`compositions/radar-scene.html` (die Szene). Das ist die Form, die
-`hyperframes lint` verlangt, sobald ein getaktetes Element verschachtelte
-Kinder hat — sie hält den Check auf null Warnungen und die Studio-Timeline
-lesbar.
+`build.mjs` writes two files: `index.html` (the shell carrying the runtime) and
+`compositions/radar-scene.html` (the scene). That is the shape
+`hyperframes lint` asks for once a timed element has nested children — it keeps
+the check at zero warnings and the Studio timeline readable.
 
-## Was du nicht anfassen solltest
+## What not to touch
 
-Der `STYLE`-Block in `build.mjs` enthält die aus der Referenz ausgelesenen
-Werte. Alle Längen stehen als **Anteil des Radarradius**, nicht in Pixeln —
-deshalb hält das Bild in jedem Format. Für ein anderes Seitenverhältnis fasst
-du sie also **nicht** an, dafür gibt es `format`.
+The `STYLE` block in `build.mjs` holds the values read out of the reference. All
+lengths are expressed as a **share of the radar radius**, not in pixels, which is
+why the picture holds in every format. So for a different aspect ratio do **not**
+touch them — that is what `format` is for.
 
-Drei Dinge sind empfindlich:
+Three things are sensitive:
 
-- **`ringSpring` und `titleSpring`.** Das sind echte Federparameter
-  (`damping` / `stiffness` / `mass`), die pro Frame durchgerechnet werden, nicht
-  GSAP-Eases. Wer daran dreht, bekommt entweder ein träges Aufgehen oder ein
-  Überschwingen, das die Ringe kurz über den Rand schiebt.
-- **`sweepPeriod: 110`.** Bestimmt die Drehzahl. Schneller wirkt hektisch,
-  langsamer lässt die Kontakte zu lange dunkel.
-- **`blipFalloff: 2.2`.** Wie schnell ein Kontakt hinter dem Strahl ausgeht.
-  Kleiner heißt: alles leuchtet dauernd, und die Scheibe verliert ihre Tiefe.
+- **`ringSpring` and `titleSpring`.** These are real spring parameters
+  (`damping` / `stiffness` / `mass`) stepped per frame, not GSAP eases. Change
+  them and you get either a sluggish opening or an overshoot that briefly pushes
+  the rings past the rim.
+- **`sweepPeriod: 110`.** Sets the rotation speed. Faster reads as frantic,
+  slower leaves the contacts dark too long.
+- **`blipFalloff: 2.2`.** How fast a contact dims behind the beam. Lower means
+  everything glows permanently and the dish loses its depth.
 
-Die Kontakte selbst sind **seeded**, nicht zufällig: dieselbe Kontaktzahl ergibt
-immer dieselbe Verteilung. Das ist der Grund, warum eine Serie von zwanzig
-Videos dasselbe Bild zeigt und nur den Namen wechselt. Zieh den Seed nicht, ohne
-dass der User eine andere Verteilung will.
+The contacts themselves are **seeded**, not random: the same contact count always
+produces the same distribution. That is why a series of twenty videos shows the
+identical picture and only swaps the name. Do not change the seed unless the user
+wants a different distribution.
 
-## Danach
+## Afterwards
 
-Zeige dem User das gerenderte MP4. Für eine weitere Überschrift im selben Stil
-reicht es, `content.json` zu ändern und `node build.mjs` erneut laufen zu lassen.
+Show the user the rendered MP4. For another headline in the same style it is
+enough to change `content.json` and run `node build.mjs` again.

@@ -1,127 +1,125 @@
 ---
 name: typewriter-liste
-description: "Erzeugt ein Video, in dem sich eine nummerierte Liste Zeichen für Zeichen auf ein Blatt Papier tippt — Schreibmaschinen-Optik, Papiertextur, stumm, 16:9, ca. 10-20 s. Nutze es, wenn jemand Thesen, Ausreden, Regeln, Behauptungen oder ein Narrativ als getippte Liste im Video will: 'Typewriter-Video', 'getippte Liste', 'Schreibmaschinen-Video', 'Liste die sich tippt', 'typewriter list video', 'typed list video'. Nicht für gesprochene Erklärvideos, Untertitel oder Produktpromos. Voraussetzung: HyperFrames CLI."
+description: "Builds a video in which a numbered list types itself onto a sheet of paper, character by character — typewriter look, paper texture, silent, 16:9, about 10-20 s. Use it when someone wants claims, excuses, rules or a narrative as a typed list in a video: 'typewriter video', 'typed list video', 'list that types itself', 'typewriter list', 'Typewriter-Video', 'getippte Liste', 'Schreibmaschinen-Video', 'Liste die sich tippt'. Not for narrated explainers, subtitles or product promos. Requires the HyperFrames CLI."
 ---
 
-# Typewriter-Liste
+# Typewriter List
 
-Eine nummerierte Liste tippt sich Zeichen für Zeichen auf ein Blatt Papier.
-Kein Ton, keine Sprecherstimme, keine Bilder — die Liste ist das ganze Video.
+A numbered list types itself onto a sheet of paper, character by character.
+No audio, no narrator, no images — the list is the entire video.
 
-Stil, Timing und Papiertextur sind aus einer Referenzaufnahme vermessen und
-stecken fertig in `template/build.mjs`. Du schreibst nur den Inhalt.
+Style, timing and paper texture were measured off a reference clip and are baked
+into `template/build.mjs`. You only write the content.
 
-## Voraussetzung zuerst prüfen
+## Check the requirement first
 
 ```bash
 npx hyperframes --version
 ```
 
-Schlägt das fehl, brich ab und sage dem User:
+If that fails, stop and tell the user:
 
-> Dieser Skill braucht die HyperFrames CLI. Installieren mit:
-> `npx skills add heygen-com/hyperframes`
+> This skill needs the HyperFrames CLI. Install it with:
+> `npx skills add heygen-com/hyperframes --global --copy --all`
 
-Rate nicht daran vorbei und baue keinen Ersatz.
+Do not guess your way around it and do not build a substitute.
 
-## Schritt 1 — Inhalt klären
+## Step 1 — Settle the content
 
-Frage den User, ob er den **Text vorgibt** oder ein **Thema** nennt.
+Ask the user whether they **supply the text** or name a **topic**.
 
-Bei einem Thema schreibst du die Liste selbst und legst sie ihm zur Freigabe
-vor, bevor du irgendetwas baust.
+For a topic you write the list yourself and put it in front of them for approval
+before you build anything.
 
-### Die Redaktionsregel — das Wichtigste an diesem Format
+### The editorial rule — the most important thing about this format
 
-Das Format funktioniert nur, wenn die Liste **jemandes Argument** ist, nüchtern
-protokolliert, und **unten kippt**. Die Verschachtelung am Ende (`4.` → `A.` `B.`)
-ist der Mechanismus dafür: Die Begründung entlarvt sich selbst.
+The format only works when the list is **somebody's argument**, recorded deadpan,
+and **tips over at the end**. The nesting at the bottom (`4.` → `A.` `B.`) is the
+mechanism for that: the justification exposes itself.
 
-Eine brave Aufzählung von Fakten ist in dieser Optik tot. Wenn der letzte Punkt
-niemanden zum Grinsen oder Zusammenzucken bringt, ist die Liste noch nicht fertig.
+A tidy enumeration of facts is dead in this look. If the last item does not make
+anyone grin or wince, the list is not finished.
 
-Beispiel für die Bauform:
+An example of the shape:
 
 ```
-WARUM WIR NOCH WARTEN
-1. DATENSCHUTZ
-2. UNSERE BRANCHE IST ANDERS
-3. DIE MITARBEITER MACHEN DAS NICHT MIT
-4. ERST MUSS DIE IT:
-   A. DIE PROZESSE SAUBER HABEN
-   B. DEN DATENSCHUTZ PRÜFEN
-5. NÄCHSTES JAHR DANN WIRKLICH
+WHY WE ARE STILL WAITING
+1. DATA PROTECTION
+2. OUR INDUSTRY IS DIFFERENT
+3. THE TEAM WILL NOT GO ALONG
+4. FIRST IT DEPENDS ON:
+   A. CLEANING UP THE PROCESSES
+   B. THE PRIVACY REVIEW
+5. NEXT YEAR THEN, REALLY
 ```
 
-### Harte Grenzen
+### Hard limits
 
-Halte dich daran, sonst läuft der Text aus dem Bild:
+Stick to these or the text runs out of frame:
 
-- **Nur Großbuchstaben.** Kleinbuchstaben laufen zwar, brechen aber den Look.
-- **Maximal 44 Zeichen pro Zeile.**
-- **Maximal 9 Zeilen** inklusive Titel.
-- Umlaute sind in Ordnung (Ä Ö Ü) und brauchen keine Umschreibung.
+- **Uppercase only.** Lowercase runs, but it breaks the look.
+- **44 characters per line maximum.**
+- **9 lines maximum** including the title.
+- Accented characters are fine and need no rewriting.
 
-## Schritt 2 — Projekt anlegen
+## Step 2 — Set up the project
 
-`<projekt>` ist ein kurzer kebab-case-Name aus dem Thema.
+`<project>` is a short kebab-case name derived from the topic.
 
 ```bash
-npx hyperframes init videos/<projekt> --non-interactive --example=blank
-cp -R <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/assets videos/<projekt>/
+npx hyperframes init videos/<project> --non-interactive --example=blank
+cp -R <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/assets videos/<project>/
 ```
 
-Kopiere `build.mjs` und die Schrift **immer ins Projekt**. Führe sie nie aus dem
-Skill-Ordner heraus aus: Das fertige Videoprojekt muss auch dann noch rendern,
-wenn dieser Skill aktualisiert oder deinstalliert wird.
+Always copy `build.mjs` and the font **into the project**. Never run them out of
+the skill folder: the finished video project has to keep rendering even if this
+skill is later updated or uninstalled.
 
-## Schritt 3 — Inhalt schreiben
+## Step 3 — Write the content
 
-`videos/<projekt>/content.json`:
+`videos/<project>/content.json`:
 
 ```json
 {
-  "title": "DEINE ÜBERSCHRIFT",
+  "title": "YOUR HEADING",
   "lines": [
-    { "text": "1. ERSTER PUNKT" },
-    { "text": "2. ZWEITER PUNKT" },
-    { "text": "A. UNTERPUNKT", "sub": true }
+    { "text": "1. FIRST POINT" },
+    { "text": "2. SECOND POINT" },
+    { "text": "A. SUB-POINT", "sub": true }
   ]
 }
 ```
 
-`"sub": true` rückt die Zeile ein und zieht sie enger an die Zeile darüber —
-damit baust du die Pointe am Listenende.
+`"sub": true` indents the line and pulls it closer to the one above — that is how
+you build the punchline at the end of the list.
 
-## Schritt 4 — Bauen, prüfen, rendern
+## Step 4 — Build, check, render
 
 ```bash
-cd videos/<projekt>
+cd videos/<project>
 node build.mjs
 npx hyperframes check .
 npx hyperframes render . -q high -o ./renders/video.mp4
 ```
 
-`build.mjs` gibt Laufzeit und Randabstand aus und **warnt**, wenn der Block
-für das Bild zu hoch wird. Nimm die Warnung ernst und kürze die Liste, statt
-sie zu ignorieren.
+`build.mjs` prints the runtime and the margin, and **warns** when the block gets
+too tall for the frame. Take the warning seriously and shorten the list instead
+of ignoring it.
 
-Laufzeit, Zeilenpositionen, Cursor-Timing und die vertikale Zentrierung
-berechnen sich aus dem Text. Bei jeder Zeilenzahl bleibt oben und unten
-derselbe Abstand.
+Runtime, line positions, caret timing and the vertical centring are all computed
+from the text. At any line count the top and bottom margins stay equal.
 
-## Was du nicht anfassen solltest
+## What not to touch
 
-Der `STYLE`-Block in `build.mjs` enthält die vermessenen Werte der Referenz.
-Änder daran nur, was der User ausdrücklich verlangt.
+The `STYLE` block in `build.mjs` holds the measured values from the reference.
+Change only what the user explicitly asks for.
 
-Ein Wert ist besonders empfindlich: `capTopInBox()` ist an zwei gemessenen
-Punkten gefittet (55 px und 81 px Schriftgröße). Wer `bodySize` oder
-`titleSize` ändert, **muss beide Punkte neu messen** — sonst verrutscht die
-vertikale Zentrierung, ohne dass eine Prüfung anschlägt. Der Kommentar im Code
-sagt, wie.
+One value is especially delicate: `capTopInBox()` is fitted to two measured
+points (55 px and 81 px type size). Anyone changing `bodySize` or `titleSize`
+**must re-measure both points** — otherwise the vertical centring drifts without
+any check catching it. The comment in the code says how.
 
-## Danach
+## Afterwards
 
-Zeige dem User das gerenderte MP4. Für eine weitere Liste im selben Stil reicht
-es, `content.json` zu ändern und `node build.mjs` erneut laufen zu lassen.
+Show the user the rendered MP4. For another list in the same style it is enough
+to change `content.json` and run `node build.mjs` again.

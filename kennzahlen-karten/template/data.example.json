@@ -1,63 +1,63 @@
 {
   "title": "LinkedIn Performance",
-  "subtitle": "1. bis 7. September 2026 · Reichweite, Profil, Newsletter",
-  "footnote": "Quelle: LinkedIn Analytics · Vergleich jeweils mit den 7 vorausgegangenen Tagen.",
+  "subtitle": "1 to 7 September 2026 · reach, profile, newsletter",
+  "footnote": "Source: LinkedIn Analytics · each compared with the preceding 7 days.",
   "metrics": [
     {
       "label": "Impressions",
       "value": 317,
       "delta": "67 %",
       "deltaTone": "down",
-      "note": "Aufrufe deiner Beiträge",
-      "meta": "7 Tage · ggü. Vorwoche",
+      "note": "views of your posts",
+      "meta": "7 days · vs. previous week",
       "trend": "down"
     },
     {
-      "label": "Follower:innen",
+      "label": "Followers",
       "value": 8879,
       "delta": "0 %",
       "deltaTone": "flat",
-      "note": "Follower:innen insgesamt",
-      "meta": "Stand 7. September · unverändert",
+      "note": "followers in total",
+      "meta": "as of 7 September · unchanged",
       "trend": "flat"
     },
     {
-      "label": "Profilbesuche",
+      "label": "Profile visits",
       "value": 266,
       "delta": "33 %",
       "deltaTone": "down",
-      "note": "Besucher:innen deines Profils",
-      "meta": "90 Tage · ggü. Vorwoche",
+      "note": "visitors to your profile",
+      "meta": "90 days · vs. previous week",
       "trend": "down"
     },
     {
-      "label": "Suchtreffer",
+      "label": "Search appearances",
       "value": 173,
       "delta": "0 %",
       "deltaTone": "flat",
-      "note": "in Suchergebnissen erschienen",
-      "meta": "1.–7. Sept. · ggü. 25.–31. Aug.",
+      "note": "times shown in search results",
+      "meta": "1–7 Sep · vs. 25–31 Aug",
       "trend": "flat"
     },
     {
-      "label": "Newsletter-Aufrufe",
+      "label": "Newsletter views",
       "value": 25,
       "delta": "17 %",
       "deltaTone": "down",
-      "note": "Aufrufe von Newsletter-Artikeln",
-      "meta": "7 Tage · ggü. Vorwoche",
+      "note": "views of newsletter articles",
+      "meta": "7 days · vs. previous week",
       "trend": "down"
     },
     {
-      "label": "Newsletter-Abos",
+      "label": "Newsletter signups",
       "value": 3,
-      "note": "neue Abonnent:innen",
-      "meta": "7 Tage · kein Vorwochenwert",
+      "note": "new subscribers",
+      "meta": "7 days · no prior-week figure",
       "trend": "flat"
     }
   ],
   "options": {
     "format": "landscape",
-    "locale": "de"
+    "locale": "en"
   }
 }

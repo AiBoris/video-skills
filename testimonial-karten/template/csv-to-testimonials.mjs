@@ -120,13 +120,13 @@ for (const r of rows.slice(1)) {
 const sources = new Set(testimonials.map((t) => t.source?.name).filter(Boolean));
 const out = {
   _todo:
-    "1) Jedes quote kürzen (max. ~16 Wörter, nur streichen, nie umformulieren, " +
-    "Auslassungen mit …). 2) Die eine entscheidende Stelle in **doppelte Sternchen** " +
-    "setzen. 3) Zitate, die auf einem Pronomen beginnen, auf den Namen umstellen " +
-    '("Boris hat …" statt "Er hat …"). 4) brand, intro und outro ausfüllen. ' +
-    "Danach dieses Feld löschen.",
+    "1) Shorten every quote (max. ~16 words, only cut, never rephrase, mark " +
+    "omissions with …). 2) Wrap the one decisive passage in **double asterisks**. " +
+    "3) Rewrite quotes that open on a pronoun to name the subject " +
+    '("Boris helped me …" instead of "He helped me …"). 4) Fill in brand, intro ' +
+    "and outro. Then delete this field.",
   brand: { kind: "person", name: "TODO", subject: "TODO" },
-  intro: { headline: "Das sagen **meine Kunden**" },
+  intro: { headline: "What **my clients** say" },
   defaultSource: { name: sources.size === 1 ? [...sources][0] : "TODO" },
   options: { format: "landscape" },
   testimonials,

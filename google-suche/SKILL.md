@@ -1,120 +1,118 @@
 ---
 name: google-suche
-description: "Erzeugt ein Video, in dem sich eine Frage Zeichen für Zeichen in das Google-Suchfeld tippt und ein Mauszeiger anschließend auf 'Google Search' klickt. Die Google-Startseite ist 1:1 nachgebaut (Original-Wordmark, Lupe, Mikrofon, Pill-Suchfeld), stumm, ca. 6-10 s, in 16:9, 9:16, 1:1 oder 4:5. Nutze es, wenn jemand den Moment der Suche als Video will: 'Google-Suche als Video', 'Frage wird gegoogelt', 'Suchleiste tippt sich', 'Google Search Video', 'jemand googelt', 'Suchanfrage Animation', 'search bar typing video'. Typischer Einsatz: Video-Hook, in dem das Publikum die eigene Frage auf dem Bildschirm sieht. Nicht für Suchergebnisseiten, Browser-Aufnahmen echter Webseiten oder Erklärvideos mit Sprecher. Voraussetzung: HyperFrames CLI."
+description: "Builds a video in which a question types itself character by character into the Google search box and a mouse pointer then clicks 'Google Search'. The Google start page is rebuilt pixel for pixel (original wordmark, magnifier, microphone, pill-shaped search field), silent, about 6-10 s, in 16:9, 9:16, 1:1 or 4:5. Use it when someone wants the moment of searching as a video: 'Google search video', 'search bar typing video', 'someone googles this', 'search query animation', 'typing into Google', 'Google-Suche als Video', 'Frage wird gegoogelt', 'Suchleiste tippt sich'. Typical use: a video hook in which the audience sees their own question on screen. Not for results pages, screen recordings of real websites, or narrated explainers. Requires the HyperFrames CLI."
 ---
 
-# Google-Suche
+# Google Search
 
-Eine leere Google-Startseite. Der Textcursor blinkt, eine Frage tippt sich
-Zeichen für Zeichen ins Suchfeld, ein Mauszeiger fährt herein, legt sich auf
-„Google Search", klickt — und danach passiert nichts mehr.
+An empty Google start page. The caret blinks, a question types itself into the
+search box character by character, a mouse pointer glides in, settles on
+“Google Search”, clicks — and then nothing else happens.
 
-Kein Ton, keine Ergebnisseite, kein Seitenwechsel. Der Hook ist die Frage.
+No audio, no results page, no navigation. The hook is the question.
 
-Geometrie, Farben und Timing sind aus einem Referenz-Screenshot vermessen und
-stecken fertig in `template/build.mjs`. Du schreibst nur die Frage.
+Geometry, colours and timing were measured off a reference screenshot and are
+baked into `template/build.mjs`. You only write the question.
 
-## Voraussetzung zuerst prüfen
+## Check the requirement first
 
 ```bash
 npx hyperframes --version
 ```
 
-Schlägt das fehl, brich ab und sage dem User:
+If that fails, stop and tell the user:
 
-> Dieser Skill braucht die HyperFrames CLI. Installieren mit:
-> `npx skills add heygen-com/hyperframes`
+> This skill needs the HyperFrames CLI. Install it with:
+> `npx skills add heygen-com/hyperframes --global --copy --all`
 
-Rate nicht daran vorbei und baue keinen Ersatz.
+Do not guess your way around it and do not build a substitute.
 
-## Schritt 1 — Die Frage klären
+## Step 1 — Settle the question
 
-Frage den User nach der **exakten Suchanfrage**. Sie ist der ganze Inhalt des
-Videos, also übernimm sie wortwörtlich und formuliere sie nicht um.
+Ask the user for the **exact search query**. It is the entire content of the
+video, so take it word for word and do not rephrase it.
 
-Nennt er nur ein Thema, schlage zwei bis drei Formulierungen vor und lass ihn
-wählen, bevor du irgendetwas baust.
+If they only name a topic, propose two or three phrasings and let them pick
+before you build anything.
 
-### Die Redaktionsregel
+### The editorial rule
 
-Das Format funktioniert, weil der Zuschauer sich beim Tippen selbst erkennt.
-Es muss die Frage sein, die er **wirklich** eingibt — nicht die, die das
-Marketing gern hätte.
+The format works because the viewer recognises themselves in the typing. It has
+to be the question they **actually** enter — not the one marketing would prefer.
 
-- Gut: `Wie erstelle ich Videos mit KI?`
-- Gut: `warum konvertiert meine landingpage nicht`
-- Tot: `Professionelle Videoproduktion Agentur Premium`
+- Good: `How do I make videos with AI?`
+- Good: `why is my landing page not converting`
+- Dead: `Professional Video Production Agency Premium`
 
-Kleinschreibung ohne Satzzeichen wirkt echter als ein sauberer Satz. Frag den
-User, welche Variante er will — beide laufen.
+Lowercase with no punctuation often reads more honestly than a clean sentence.
+Ask the user which they want — both work.
 
-### Harte Grenzen
+### Hard limits
 
-- **Maximal ~60 Zeichen.** `build.mjs` rechnet die Grenze für Format und `scale`
-  aus und warnt. Längerer Text wird links abgeschnitten, genau wie in
-  einem echten Eingabefeld — das sieht absichtlich aus, ist aber selten gewollt.
-- **Eine Zeile**, kein Zeilenumbruch.
-- Umlaute und Emojis laufen.
+- **About 60 characters max.** `build.mjs` computes the limit for the chosen
+  format and `scale` and warns. Longer text is clipped on the left exactly like
+  a real input field — that looks deliberate but is rarely what was wanted.
+- **One line**, no line breaks.
+- Accented characters and emoji work.
 
-## Schritt 2 — Look festlegen
+## Step 2 — Settle the look
 
-Fragen, die du nur stellst, wenn der User nichts dazu gesagt hat. Ansonsten
-nimm die Voreinstellung.
+Only ask these if the user has not already said. Otherwise take the default.
 
-| Feld     | Voreinstellung | Alternativen                                             |
-| -------- | -------------- | -------------------------------------------------------- |
-| `format` | `16:9`         | `9:16`, `1:1`, `4:5`                                     |
-| `scale`  | `1`            | 0.4 bis 3 — vergrößert die Seite, ohne sie zu verschieben |
-| `theme`  | `cream`        | `light` (weiße Startseite), `dark` (Dark Mode)           |
-| `labels` | englisch       | deutsch: `"Google Suche"` / `"Auf gut Glück!"`           |
-| `click`  | `search`       | `lucky` — der Zeiger klickt „Auf gut Glück!" stattdessen  |
+| Field    | Default  | Alternatives                                           |
+| -------- | -------- | ------------------------------------------------------ |
+| `format` | `16:9`   | `9:16`, `1:1`, `4:5`                                   |
+| `scale`  | `1`      | 0.4 to 3 — enlarges the page without moving it         |
+| `theme`  | `cream`  | `light` (white start page), `dark` (dark mode)         |
+| `labels` | English  | German: `"Google Suche"` / `"Auf gut Glück!"`          |
+| `click`  | `search` | `lucky` — the pointer clicks the other button instead  |
 
-`cream` ist die warme Variante aus der Referenz und hebt sich in einem Feed
-deutlich stärker ab als das gewohnte Weiß. Nimm sie im Zweifel.
+`cream` is the warm variant from the reference and stands out far more in a feed
+than the familiar white. Take it when in doubt.
 
-### Format und `scale` hängen zusammen
+### Format and `scale` are connected
 
-Die Seite behält in jedem Format ihre gemessenen Pixelmaße; nur die
-Höhenpositionen wandern anteilig mit. In 16:9 ist das genau die Referenz — in
-9:16 wird daraus die Desktop-Seite in einem schmalen Rahmen, mit sehr kleiner
-Schrift und viel Luft unten.
+The page keeps its measured pixel sizes in every format; only the vertical
+positions move proportionally. In 16:9 that is exactly the reference. In 9:16 it
+becomes the desktop page inside a narrow frame — very small type, a lot of air
+below.
 
-Das ist manchmal genau der gewollte Look. Für ein Reel, das auf dem Handy
-lesbar sein soll, ist es das nicht. Dann `scale` hochsetzen:
+Sometimes that is precisely the look you want. For a reel that has to be readable
+on a phone it is not. Then raise `scale`:
 
-| Format | `scale` | Ergebnis                                                     |
-| ------ | ------- | ------------------------------------------------------------ |
-| `16:9` | `1`     | die Referenz, unverändert                                    |
-| `9:16` | `1`     | Desktop-Seite im Hochformat — klein, viel Weißraum           |
-| `9:16` | `1.5`   | Suchfeld füllt die Breite, Frage gut lesbar (**Empfehlung**) |
-| `1:1`  | `1.3`   | ausgewogen für den Feed                                      |
+| Format | `scale` | Result                                                     |
+| ------ | ------- | ---------------------------------------------------------- |
+| `16:9` | `1`     | the reference, unchanged                                   |
+| `9:16` | `1`     | desktop page in portrait — small, lots of white space      |
+| `9:16` | `1.5`   | search box fills the width, question readable (**pick this**) |
+| `1:1`  | `1.3`   | balanced for a feed                                        |
 
-Bei 1080 px Breite ist `1.5` das Maximum, bevor das Suchfeld den Rand berührt.
-`build.mjs` warnt, wenn es zu eng wird — nimm die Warnung ernst.
+At 1080 px wide, `1.5` is the maximum before the box touches the edge.
+`build.mjs` warns when it gets too tight — take the warning seriously.
 
-Frage den User im Hochformat aktiv, welche der beiden Varianten er will. Baue
-im Zweifel beide: es kostet einen zweiten `node build.mjs` und einen Render.
+In portrait, actively ask the user which of the two they want. When in doubt
+build both: it costs one more `node build.mjs` and one more render.
 
-## Schritt 3 — Projekt anlegen
+## Step 3 — Set up the project
 
-`<projekt>` ist ein kurzer kebab-case-Name aus der Frage.
+`<project>` is a short kebab-case name derived from the question.
 
 ```bash
-npx hyperframes init videos/<projekt> --non-interactive --example=blank
-cp -R <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/content.json <SKILL_DIR>/template/assets videos/<projekt>/
+npx hyperframes init videos/<project> --non-interactive --example=blank
+cp -R <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/content.json <SKILL_DIR>/template/assets videos/<project>/
 ```
 
-Kopiere `build.mjs` und `assets/` **immer ins Projekt**. Führe sie nie aus dem
-Skill-Ordner heraus aus: Das fertige Videoprojekt muss auch dann noch rendern,
-wenn dieser Skill aktualisiert oder deinstalliert wird.
+Always copy `build.mjs` and `assets/` **into the project**. Never run them out of
+the skill folder: the finished video project has to keep rendering even if this
+skill is later updated or uninstalled.
 
-## Schritt 4 — Inhalt schreiben
+## Step 4 — Write the content
 
-`videos/<projekt>/content.json`:
+`videos/<project>/content.json`:
 
 ```json
 {
-  "query": "Wie erstelle ich Videos mit KI?",
+  "query": "How do I make videos with AI?",
   "format": "16:9",
   "scale": 1,
   "theme": "cream",
@@ -126,61 +124,59 @@ wenn dieser Skill aktualisiert oder deinstalliert wird.
 }
 ```
 
-## Schritt 5 — Bauen, prüfen, rendern
+## Step 5 — Build, check, render
 
 ```bash
-cd videos/<projekt>
+cd videos/<project>
 node build.mjs
 npx hyperframes check .
 npx hyperframes render . -q high -o ./renders/video.mp4
 ```
 
-`build.mjs` gibt Tippdauer, Klickzeitpunkt und Gesamtlaufzeit aus. Die Laufzeit
-ergibt sich aus der Zeichenzahl — eine kurze Frage ergibt ein kürzeres Video.
+`build.mjs` prints the typing duration, the click moment and the total runtime.
+The runtime follows the character count — a shorter question gives a shorter
+video.
 
-## Der Ablauf, den das Video erzeugt
+## The sequence the video produces
 
-| Beat        | Was passiert                                                       |
-| ----------- | ------------------------------------------------------------------ |
-| 0.0–0.9 s   | leeres Suchfeld, Textcursor blinkt                                 |
-| ab 0.9 s    | die Frage tippt sich, mit ungleichmäßigem Anschlag und Wortpausen  |
-| +0.4 s      | die Frage steht vollständig                                        |
-| +1.05 s     | der Mauszeiger kommt von unten rechts, Hover mit Unterstrich       |
-| +0.15 s     | Klick — der Zeiger drückt, ein Ring läuft aus                      |
-| +1.05 s     | Ende. Es passiert bewusst nichts mehr.                             |
+| Beat       | What happens                                                    |
+| ---------- | --------------------------------------------------------------- |
+| 0.0–0.9 s  | empty search box, caret blinking                                |
+| from 0.9 s | the question types itself, uneven keystrokes, pauses between words |
+| +0.4 s     | the question stands complete                                    |
+| +1.05 s    | the pointer comes in from the lower right, hover with underline |
+| +0.15 s    | click — the pointer presses, a ring expands                     |
+| +1.05 s    | end. Deliberately nothing else happens.                         |
 
-Der Tipprhythmus ist **seeded**, nicht zufällig: Derselbe Text ergibt bei jedem
-Render exakt denselben Anschlag.
+The typing rhythm is **seeded**, not random: the same text produces exactly the
+same keystrokes on every render.
 
-## Was du nicht anfassen solltest
+## What not to touch
 
-Der `STYLE`-Block in `build.mjs` enthält die vermessenen Werte des Referenz-
-Screenshots — Boxbreite 640, Höhe 48, Radius 26, Wordmark 230 px, die
-Y-Positionen von Logo, Feld und Links, gemessen in einem 1080 px hohen Rahmen. Änder daran nur, was der User
-ausdrücklich verlangt: Die Seite sieht sonst schnell „fast wie Google" aus,
-und genau das fällt auf.
+The `STYLE` block in `build.mjs` holds the values measured off the reference
+screenshot — box width 640, height 48, radius 26, wordmark 230 px, and the Y
+positions of logo, field and links, measured in a 1080 px tall frame. Change only
+what the user explicitly asks for: the page very quickly ends up looking “almost
+like Google”, and that is exactly what people notice.
 
-Für ein anderes Seitenverhältnis fasst du diese Werte **nicht** an — dafür gibt
-es `format` und `scale`. Wer stattdessen an `boxWidth` dreht, verschiebt die
-Zeichengrenze, die `build.mjs` ausrechnet: Die Warnung beim Bauen ist dann keine
-Kleinigkeit, sondern abgeschnittener Text.
+For a different aspect ratio do **not** touch these — that is what `format` and
+`scale` are for. Turning `boxWidth` instead shifts the character limit
+`build.mjs` computes, and then the warning at build time is not a detail but
+truncated text.
 
-`cursorFromWide` / `cursorFromTall` legen fest, aus welcher Richtung der
-Mauszeiger hereinfährt — im Hochformat von weiter unten, weil rechts kein Platz
-ist. Die Wahl trifft `build.mjs` selbst anhand der Bildmaße.
+`cursorFromWide` / `cursorFromTall` decide which direction the pointer enters
+from — in portrait from further below, because there is no room to the right.
+`build.mjs` makes that choice itself from the frame dimensions.
 
-`charsPerSecond: 8.7` ist die gemessene Tippgeschwindigkeit. Höher wirkt
-maschinell, niedriger zäh.
+## Legal
 
-## Rechtliches
+`template/assets/google-logo.svg` is Google's wordmark. The skill uses it to
+build a recognisable restaging of the Google start page — usual and unproblematic
+for mockups, hooks and editorial videos, but it remains someone else's trademark.
+Point this out to the user if the video would imply that Google is affiliated
+with them or endorses them.
 
-`template/assets/google-logo.svg` ist Googles Wortmarke. Der Skill baut damit
-eine erkennbare Nachstellung der Google-Startseite — üblich und unproblematisch
-für Mockups, Hooks und redaktionelle Videos, aber es ist fremdes Markenrecht.
-Weise den User darauf hin, wenn das Video eine Google-Zugehörigkeit oder
--Empfehlung suggerieren würde.
+## Afterwards
 
-## Danach
-
-Zeige dem User das gerenderte MP4. Für eine weitere Frage im selben Stil reicht
-es, `content.json` zu ändern und `node build.mjs` erneut laufen zu lassen.
+Show the user the rendered MP4. For another question in the same style it is
+enough to change `content.json` and run `node build.mjs` again.

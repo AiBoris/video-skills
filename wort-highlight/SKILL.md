@@ -1,116 +1,113 @@
 ---
 name: wort-highlight
-description: "Erzeugt ein Kinetic-Typography-Video: farbiger Vollflächen-Hintergrund, zwei Zeilen fetter Schrift, und ein schräger dunkler Balken wandert Wort für Wort durch den Satz und dreht das Wort darunter auf Weiß. Nutze es, wenn jemand einen Text als Video will: 'Wort-Highlight', 'Kinetic Typography', 'Text-Video', 'Textanimation', 'Wort für Wort hervorheben', 'Claim als Video', 'Slogan-Video', 'Hook-Video für Social'. Der Text wird selbstständig in Phrasen und Zeilen aufgeteilt. Die Farbe kommt aus dem Referenz-Gelb, aus einer Vorgabe des Users oder wird aus seiner Webseite ausgelesen. Nicht für Sprecher-Videos, Untertitel, Balkendiagramme oder Produktdemos. Voraussetzung: HyperFrames CLI."
+description: "Builds a kinetic typography video: a full-bleed colour background, two lines of bold type, and a slanted dark bar travelling word by word through the sentence, flipping the word underneath to white. Use it when someone wants a piece of text as a video: 'kinetic typography', 'word highlight', 'text video', 'text animation', 'highlight word by word', 'claim as video', 'slogan video', 'social hook video', 'Wort-Highlight', 'Text-Video', 'Claim als Video'. The text is split into phrases and lines automatically. The colour comes from the reference yellow, from the user, or is read off their website. Not for narrated videos, subtitles, bar charts or product demos. Requires the HyperFrames CLI."
 ---
 
-# Wort-Highlight
+# Word Highlight
 
-Ein Satz steht groß im Bild, höchstens zwei Zeilen auf einmal. Ein schräger
-dunkler Balken springt von Wort zu Wort und dreht das Wort darunter auf Weiß.
-Kein Ton, keine Bilder, keine Sprecherstimme — der Text ist das ganze Video.
+A sentence stands large in frame, at most two lines at a time. A slanted dark bar
+jumps from word to word and flips the word underneath to white. No audio, no
+images, no narrator — the text is the whole video.
 
-Optik und Timing sind aus einer Referenzaufnahme vermessen und stecken fertig in
-`template/build.mjs`. Du lieferst nur Text und Farbe.
+Look and timing were measured off a reference clip and are baked into
+`template/build.mjs`. You only supply text and colour.
 
-## Voraussetzung zuerst prüfen
+## Check the requirement first
 
 ```bash
 npx hyperframes --version
 ```
 
-Schlägt das fehl, brich ab und sage dem User:
+If that fails, stop and tell the user:
 
-> Dieser Skill braucht die HyperFrames CLI. Installieren mit:
-> `npx skills add heygen-com/hyperframes`
+> This skill needs the HyperFrames CLI. Install it with:
+> `npx skills add heygen-com/hyperframes --global --copy --all`
 
-Rate nicht daran vorbei und baue keinen Ersatz.
+Do not guess your way around it and do not build a substitute.
 
-## Schritt 1 — Text klären
+## Step 1 — Settle the text
 
-Frage den User, ob er den **Text vorgibt** oder ein **Thema** nennt. Bei einem
-Thema schreibst du den Text selbst und legst ihn zur Freigabe vor, bevor du
-irgendetwas baust.
+Ask the user whether they **supply the text** or name a **topic**. For a topic
+you write the text yourself and put it in front of them for approval before you
+build anything.
 
-Du gibst **einen Fließtext** in `content.json`. Zeilen- und Phrasenumbrüche
-setzt `build.mjs` selbst — schreib keine Zeilenumbrüche in den Text hinein.
+You give **one running text** in `content.json`. Line and phrase breaks are set
+by `build.mjs` itself — do not put line breaks into the text.
 
-### Die Redaktionsregel
+### The editorial rule
 
-Jedes Wort bekommt seinen eigenen Moment im Balken, also zählt jedes Wort.
-Füllwörter fallen in dieser Optik sofort auf.
+Every word gets its own moment under the bar, so every word counts. Filler words
+stand out immediately in this look.
 
-- **15 bis 40 Wörter.** Darunter wirkt das Video abgehackt, darüber ermüdet es.
-  Etwa 0,45 s pro Wort: 25 Wörter ≈ 14 s.
-- **Kurze Hauptsätze.** Satzzeichen sind die Schnitte: Punkt, Komma,
-  Gedankenstrich, Doppelpunkt und Semikolon beenden jeweils eine Phrase.
-  Wer die Schnitte steuern will, setzt Kommas.
-- **Keine Schachtelsätze.** Ein Nebensatz, der über vier Phrasen läuft, ist beim
-  letzten Wort nicht mehr lesbar.
-- **Zahlen und Zeichen zusammenlassen.** `100 %` bleibt ein Wort, das ist schon
-  eingebaut.
+- **15 to 40 words.** Below that the video feels clipped, above it tires.
+  Roughly 0.45 s per word: 25 words ≈ 14 s.
+- **Short main clauses.** Punctuation marks are the cuts: full stop, comma, dash,
+  colon and semicolon each end a phrase. To control the cuts, place commas.
+- **No nested clauses.** A subordinate clause running across four phrases is no
+  longer readable by its last word.
+- **Keep numbers and symbols together.** `100 %` stays one word — that is already
+  built in.
 
-## Schritt 2 — Farbe klären
+## Step 2 — Settle the colour
 
-Drei Wege, in dieser Reihenfolge:
+Three routes, in this order:
 
-1. **Der User nennt eine Farbe** (`#1B6EF3`, "unser Blau", ein Hex aus dem
-   Styleguide) → direkt in `content.json` unter `brand.bg`.
-2. **Der User nennt eine Webseite** → `brand.mjs` liest sie aus (Schritt 4).
-3. **Nichts davon** → das Referenz-Gelb `#FAC143` bleibt stehen. Frag einmal
-   nach, bevor du damit renderst.
+1. **The user names a colour** (`#1B6EF3`, “our blue”, a hex from the style
+   guide) → straight into `content.json` under `brand.bg`.
+2. **The user names a website** → `brand.mjs` reads it out (step 4).
+3. **Neither** → the reference yellow `#FAC143` stays. Ask once before rendering
+   with it.
 
-Du gibst **nur den Hintergrund** an. Schrift, Balken und Balkenschrift leitet
-`build.mjs` daraus ab: heller Hintergrund bekommt fast schwarze Schrift und
-einen fast schwarzen Balken, dunkler Hintergrund dreht beides um. Setz
-`brand.ink`, `brand.slab` oder `brand.slabInk` nur, wenn der User das ausdrücklich
-verlangt — sonst kippt der Kontrast.
+You only ever specify **the background**. Type, bar and bar type are derived from
+it by `build.mjs`: a light background gets near-black type and a near-black bar,
+a dark background inverts both. Set `brand.ink`, `brand.slab` or `brand.slabInk`
+only when the user explicitly asks — otherwise the contrast tips over.
 
-Sehr blasse oder sehr dunkle Markenfarben tragen dieses Format nicht. Wenn die
-Marke ein helles Grau ist, sag das und schlage die kräftigste Farbe aus dem
-Markenset vor.
+Very pale or very dark brand colours do not carry this format. If the brand is a
+light grey, say so and propose the strongest colour in the brand set.
 
-## Schritt 3 — Projekt anlegen
+## Step 3 — Set up the project
 
-`<projekt>` ist ein kurzer kebab-case-Name aus dem Thema.
+`<project>` is a short kebab-case name derived from the topic.
 
 ```bash
-npx hyperframes init videos/<projekt> --non-interactive --example=blank
+npx hyperframes init videos/<project> --non-interactive --example=blank
 cp -R <SKILL_DIR>/template/build.mjs <SKILL_DIR>/template/brand.mjs \
-      <SKILL_DIR>/template/content.json <SKILL_DIR>/template/assets videos/<projekt>/
+      <SKILL_DIR>/template/content.json <SKILL_DIR>/template/assets videos/<project>/
 ```
 
-Kopiere die Skripte und die Schrift **immer ins Projekt**. Führe sie nie aus dem
-Skill-Ordner heraus aus: Das fertige Videoprojekt muss auch dann noch rendern,
-wenn dieser Skill aktualisiert oder deinstalliert wird.
+Always copy the scripts and the font **into the project**. Never run them out of
+the skill folder: the finished video project has to keep rendering even if this
+skill is later updated or uninstalled.
 
-## Schritt 4 — Markenfarbe aus der Webseite (nur Weg 2)
+## Step 4 — Brand colour from a website (route 2 only)
 
 ```bash
-cd videos/<projekt>
-node brand.mjs https://kundenseite.de          # nur anzeigen
-node brand.mjs https://kundenseite.de --write  # in content.json übernehmen
+cd videos/<project>
+node brand.mjs https://clientsite.com          # show only
+node brand.mjs https://clientsite.com --write  # write into content.json
 ```
 
-Das Skript liest die Seite und ihre Stylesheets und rankt die Farben: eine
-deklarierte Marken-Variable (`--brand`, `--primary`, `--accent`) schlägt alles,
-danach `<meta name="theme-color">`, danach Häufigkeit im CSS. Es zeigt die sechs
-besten Treffer.
+The script reads the page and its stylesheets and ranks the colours: a declared
+brand variable (`--brand`, `--primary`, `--accent`) beats everything, then
+`<meta name="theme-color">`, then frequency in the CSS. It shows the six best
+hits.
 
-**Zeig dem User die Liste, bevor du `--write` ausführst.** Das Skript kann eine
-Akzentfarbe erwischen, die auf der Seite nur in einem Button vorkommt. Die
-Entscheidung gehört ihm, nicht dem Ranking.
+**Show the user the list before you run `--write`.** The script can pick up an
+accent colour that appears on the site in one button only. That decision is
+theirs, not the ranking's.
 
-Findet es nichts Brauchbares — bei Seiten, die ihr CSS in JavaScript bündeln,
-kommt das vor — beendet es sich mit einer Meldung. Dann frag den User nach dem
-Hex-Wert. Bau kein Fallback dazu.
+If it finds nothing usable — which happens with sites that bundle their CSS into
+JavaScript — it exits with a message. Then ask the user for the hex value. Do not
+build a fallback around it.
 
-## Schritt 5 — Inhalt schreiben
+## Step 5 — Write the content
 
-`videos/<projekt>/content.json`:
+`videos/<project>/content.json`:
 
 ```json
 {
-  "text": "Dein Fließtext. Ein Satz, zwei Sätze, ruhig mit Kommas.",
+  "text": "Your running text. One sentence, two sentences, commas welcome.",
   "brand": { "bg": "#FAC143" },
   "speed": 1,
   "width": 1920,
@@ -120,53 +117,52 @@ Hex-Wert. Bau kein Fallback dazu.
 
 Optional:
 
-- `speed` — Tempo. `1.2` ist zwanzig Prozent schneller, `0.85` langsamer.
-- `fontSize` — überschreibt die berechnete Schriftgröße in px. Nur anfassen,
-  wenn der User mehr Wörter pro Zeile will: kleinere Schrift heißt längere
-  Zeilen. Bei 1920 px Breite sind 171 px der Referenzwert, 150 px packt bei
-  deutschen Texten meist ein Wort mehr pro Zeile.
-- `width` / `height` — z. B. `1080` × `1920` für Hochformat. Die Schriftgröße
-  skaliert mit.
+- `speed` — pace. `1.2` is twenty percent faster, `0.85` slower.
+- `fontSize` — overrides the computed type size in px. Only touch it when the
+  user wants more words per line: smaller type means longer lines. At 1920 px
+  wide, 171 px is the reference value; 150 px usually fits one more word per line
+  for German text.
+- `width` / `height` — e.g. `1080` × `1920` for portrait. The type size scales
+  with it.
 
-## Schritt 6 — Bauen, prüfen, rendern
+## Step 6 — Build, check, render
 
 ```bash
-cd videos/<projekt>
+cd videos/<project>
 node build.mjs
 npx hyperframes check .
 npx hyperframes render . -q high -o ./renders/video.mp4
 ```
 
-`build.mjs` gibt Laufzeit, Schriftgröße und die fertige Aufteilung Phrase für
-Phrase aus. **Lies diese Liste, bevor du renderst** — daran siehst du sofort,
-ob der Umbruch den Satz zerlegt hat. Wenn eine Phrase schlecht sitzt, änderst du
-den Text (ein Komma mehr, ein Wort kürzer), nicht den `STYLE`-Block.
+`build.mjs` prints the runtime, the type size and the finished split phrase by
+phrase. **Read that list before you render** — it shows immediately whether the
+break has mangled the sentence. If a phrase sits badly, change the text (one more
+comma, one shorter word), not the `STYLE` block.
 
-`check` meldet bei diesem Format zwei Warnungen, die so sein müssen:
-`timeline_track_too_dense` (jede Phrase ist ein eigener Clip) und ein paar
-Kontrast-Warnungen (der Prüfer misst die weiße Kopie gegen den Hintergrund statt
-gegen den Balken, der wirklich dahinter liegt). Fehler dürfen keine auftreten.
+For this format `check` reports two warnings that are supposed to be there:
+`timeline_track_too_dense` (every phrase is its own clip) and a few contrast
+warnings (the checker measures the white copy against the background rather than
+against the bar that is actually behind it). Errors must not appear.
 
-## Was du nicht anfassen solltest
+## What not to touch
 
-Der `STYLE`-Block in `build.mjs` enthält die vermessenen Werte der Referenz —
-Schräge, Balkenhöhe, Zeilenabstand, Polsterung — alle in em, damit eine einzige
-Schriftgröße das ganze Design skaliert. Änder daran nur, was der User
-ausdrücklich verlangt.
+The `STYLE` block in `build.mjs` holds the values measured off the reference —
+slant, bar height, line spacing, padding — all in em, so a single type size
+scales the entire design. Change only what the user explicitly asks for.
 
-Zwei Dinge hängen zusammen und dürfen nur gemeinsam geändert werden:
+Two things are connected and may only be changed together:
 
-- **`font-kerning: none` und `font-variant-ligatures: none` im erzeugten CSS.**
-  Nur dadurch entspricht die Summe der Breiten aus
-  `assets/metrics/poppins-500.json` exakt dem, was der Browser setzt. Ohne sie
-  wandern alle Balken um ein paar Pixel neben ihr Wort, und keine Prüfung
-  schlägt an.
-- **Schriftart und Breitentabelle.** Eine andere Schrift braucht eine neue
-  `poppins-500.json` (Vorschubbreiten in em, gemessen mit ausgeschaltetem
-  Kerning) und neue Werte für `baselineFromTop`, `cap`, `ascender`, `descender`.
-  Die Kopfzeile der JSON sagt, wie sie gemessen wurden.
+- **`font-kerning: none` and `font-variant-ligatures: none` in the generated
+  CSS.** They are the only reason the sum of the widths from
+  `assets/metrics/poppins-500.json` matches exactly what the browser sets.
+  Without them every bar drifts a few pixels away from its word, and no check
+  catches it.
+- **Typeface and width table.** A different font needs a new
+  `poppins-500.json` (advance widths in em, measured with kerning off) and new
+  values for `baselineFromTop`, `cap`, `ascender` and `descender`. The header of
+  the JSON says how they were measured.
 
-## Danach
+## Afterwards
 
-Zeige dem User das gerenderte MP4. Für einen weiteren Text im selben Stil reicht
-es, `content.json` zu ändern und `node build.mjs` erneut laufen zu lassen.
+Show the user the rendered MP4. For another text in the same style it is enough
+to change `content.json` and run `node build.mjs` again.

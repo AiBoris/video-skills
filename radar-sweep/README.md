@@ -1,76 +1,88 @@
-# Radar-Sweep — Skill für KI-Agenten
+# Radar Sweep — a skill for AI agents
 
-Erzeugt Videos mit einer drehenden Radarscheibe: Ringe springen auf, ein
-Suchstrahl kreist mit nachziehendem Schweif, Kontakte blitzen bernsteinfarben
-auf. Dunkel, technisch, stumm, 4 bis 12 Sekunden.
+Builds videos with a rotating radar dish: rings snap open, a search beam sweeps
+with a trailing wake, contacts flash amber. Dark, technical, silent, 4 to 12
+seconds.
 
-> **Neu hier? Lies ANLEITUNG.md** — Schritt für Schritt, ohne Vorkenntnisse.
-> Das hier ist die Kurzfassung.
+> **New here? Read SETUP.md** — step by step, no prior knowledge needed.
+> This is the short version.
 
-## Installieren
+## Install
 
 ```bash
 npx skills add AiBoris/video-skills@radar-sweep --global --copy --all
 ```
 
-Danach den KI-Agenten neu starten.
+To get all seven skills instead, drop the `@radar-sweep`. Restart your AI agent
+afterwards.
 
-## Voraussetzungen
+- `--copy` copies instead of linking, `--global` installs for every project,
+  `--all` skips the prompts.
 
-Node.js 22 oder neuer, FFmpeg, und die HyperFrames CLI:
+## Requirements
+
+Node.js 22 or newer (`node --version`), FFmpeg (`ffmpeg -version`) and the
+HyperFrames CLI:
 
 ```bash
-brew install ffmpeg
+brew install ffmpeg          # Mac; Windows: winget install ffmpeg
 npx skills add heygen-com/hyperframes --global --copy --all
 ```
 
-## Benutzen
+## Use it
 
-> Mach mir ein Radar-Video mit der Überschrift „Wir finden Fachkräfte für Nexora Automation"
+Just tell your agent:
 
-## Der eigentliche Trick: die Serie
+> Make me a radar video with the headline “We find engineers for Nexora Automation”
 
-`title` darf `{name}` enthalten. Steht in `names` eine Liste von Firmen, baut
-der Skill daraus je ein eigenes Video — gleiche Scheibe, gleiche Kontakte,
-gleiche Bewegung, nur ein anderer Name im Titel.
+It asks for the headline, format and colour variant, sets up the project and renders the MP4.
+
+## The real trick: the series
+
+`title` may contain `{name}`. Put a list of companies in `names` and the skill
+builds one video per name — same dish, same contacts, same motion, only the name
+in the title changes.
 
 ```json
 {
-  "title": "Wir finden Fachkräfte für {name}",
-  "names": ["Nexora Automation GmbH", "Veltrix Systems GmbH"]
+  "title": "We find engineers for {name}",
+  "names": ["Nexora Automation", "Veltrix Systems"]
 }
 ```
 
-Dafür ist das Format gebaut: personalisierte Erstkontakt-Videos, bei denen der
-Empfänger sich selbst im Fadenkreuz sieht.
+That is what the format is built for: personalised first-contact videos where the
+recipient sees themselves in the crosshairs.
 
-## Einstellungen
+## Settings
 
-| Feld | Voreinstellung | Alternativen |
+| Field | Default | Alternatives |
 | --- | --- | --- |
 | `format` | `16:9` | `9:16`, `1:1`, `4:5` |
 | `preset` | `gruen` | `bernstein`, `blau`, `rot` |
-| `duration` | `6` | 3 bis 20 Sekunden |
-| `blips` | `9` | 1 bis 24 Kontakte |
+| `duration` | `6` | 3 to 20 seconds |
+| `blips` | `9` | 1 to 24 contacts |
 | `crosshair` / `scanlines` | `true` | `false` |
 
-## Grenzen
+## Limits
 
-- Die Überschrift darf **höchstens drei Zeilen** ergeben, sonst läuft sie in die
-  Scheibe. `build.mjs` warnt.
-- Der Strahl braucht **3,7 Sekunden pro Umdrehung**. Unter 5 Sekunden Laufzeit
-  bleiben Kontakte dunkel.
-- Kein Ton, keine echten Landkarten, keine echten Koordinaten — die
-  mitlaufenden Werte unten rechts sind Kulisse.
+- The headline may run to **three lines at most**, or it collides with the dish.
+  `build.mjs` warns.
+- The beam needs **3.7 seconds per revolution**. Below 5 seconds of runtime some
+  contacts never light up.
+- No audio, no real maps, no real coordinates — the running values in the bottom
+  right are set dressing.
 
-## Was drin ist
+## What is in here
 
 ```
-ANLEITUNG.md              Einrichtung für Einsteiger
-SKILL.md                  Anleitung für den Agenten
+SETUP.md                  setup for beginners
+SKILL.md                  instructions for the agent
 template/
-  build.mjs               Generator + alle ausgelesenen Stilwerte
-  content.json            Beispielinhalt
-  assets/fonts/           Inter und JetBrains Mono (liegen lokal bei, damit
-                          Renders offline und überall identisch aussehen)
+  build.mjs               generator + every measured style value
+  content.json            example content
+  assets/fonts/           Inter and JetBrains Mono (bundled so renders work
+                          offline and look identical everywhere)
 ```
+
+Every project gets its own copy of `build.mjs` and the assets, so a finished
+video still renders years later even if this skill is updated or removed.

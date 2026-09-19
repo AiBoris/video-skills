@@ -1,41 +1,28 @@
-# Testimonial-Karten — Skill für KI-Agenten
+# Testimonial Cards — a skill for AI agents
 
-Erzeugt Videos aus echten Kundenstimmen: Titelkarte („Das sagen unsere Kunden"),
-dann je eine Glaskarte mittig im Bild — goldene Sterne, das Zitat schreibt sich
-Wort für Wort ein, die entscheidende Stelle leuchtet gold, darunter Name und
-Quelle (Google, ProvenExpert, Trustpilot …) — und zum Schluss die Gesamtnote mit
-Call-to-Action und Webseite. Dunkler Spotlight-Grund, stumm, ohne Datumsangaben.
+Builds videos from real customer reviews: a title card, then one glass card per
+quote — golden stars, the quote writing itself in word by word, the decisive
+phrase glowing gold, name and source underneath — and a closing card with the
+overall rating and your call to action. Silent.
 
-Quelle sind einzelne Zitate, eine CSV, ein Bewertungsprofil im Netz oder die
-eigene Website.
+> **New here? Read SETUP.md** — step by step, no prior knowledge needed.
+> This is the short version.
 
-**Die Laufzeit ergibt sich aus der Anzahl der Zitate:** 4 Zitate mit Titel- und
-Schlusskarte ≈ 40 s. Nichts einzustellen.
-
-> **Neu hier? Lies ANLEITUNG.md** — Schritt für Schritt, ohne Vorkenntnisse.
-> Das hier ist die Kurzfassung.
-
-## Installieren
-
-Ordner entpacken, dann:
+## Install
 
 ```bash
-npx skills add /pfad/zu/testimonial-karten-skill --global --copy --all
+npx skills add AiBoris/video-skills@testimonial-karten --global --copy --all
 ```
 
-- `--copy` kopiert statt zu verlinken. Ohne das Flag geht der Skill kaputt,
-  sobald du diesen Ordner verschiebst oder löschst.
-- `--global` installiert für alle Projekte, nicht nur das aktuelle.
-- `--all` überspringt die Rückfragen.
+To get all seven skills instead, drop the `@testimonial-karten`. Restart your AI agent
+afterwards.
 
-Danach den KI-Agenten neu starten.
+- `--copy` copies instead of linking, `--global` installs for every project,
+  `--all` skips the prompts.
 
-Der Skill wird für alle gängigen KI-Agenten installiert — Claude Code, Codex,
-Cursor, Gemini, Goose, opencode, Roo, Windsurf und weitere.
+## Requirements
 
-## Voraussetzungen
-
-Node.js 22 oder neuer (`node --version`), FFmpeg (`ffmpeg -version`) und die
+Node.js 22 or newer (`node --version`), FFmpeg (`ffmpeg -version`) and the
 HyperFrames CLI:
 
 ```bash
@@ -43,48 +30,55 @@ brew install ffmpeg          # Mac; Windows: winget install ffmpeg
 npx skills add heygen-com/hyperframes --global --copy --all
 ```
 
-## Benutzen
+## Use it
 
-Sag deinem Agenten:
+Just tell your agent:
 
-> Mach mir ein Testimonial-Video aus unseren Google-Bewertungen: <Profil-Link>
+> Make me a testimonial video from our Google reviews: <profile link>
 
-oder:
+It asks for four things first (person or company, how you are referred to in quotes, your call to action, your website), then fetches the reviews, sets up the project and renders the MP4.
 
-> Mach mir Testimonial-Karten aus dieser CSV: /pfad/zu/bewertungen.csv
+You can also point it at a CSV, or just paste the quotes into the chat.
 
-oder einfach die Zitate direkt in den Chat.
+It shortens each quote to card length, proposes the one phrase that should glow
+gold, and **puts everything in front of you for approval before it builds**.
 
-Der Agent fragt zuerst vier Dinge ab (Einzelperson oder Unternehmen, wie du in
-Zitaten genannt wirst, dein Call-to-Action, deine Webseite), holt dann die
-Bewertungen, kürzt sie auf Kartenlänge, schlägt für jede die eine Stelle vor, die
-golden leuchten soll — und **legt dir alles zur Freigabe vor, bevor er baut**.
+## The rule the skill enforces
 
-## Die Regel, die der Skill durchsetzt
+Every card needs a **focus phrase**: exactly one passage in the quote that glows
+gold. Without one the generator refuses to build. A card with no focus is a grey
+wall the eye slides off.
 
-Jede Karte braucht einen **Fokustext**: genau eine Stelle im Zitat, die golden
-leuchtet. Fehlt sie, baut der Generator nicht. Ohne Fokus ist die Karte eine
-graue Wand, an der das Auge abrutscht.
+And quotes are only ever **shortened**, never reworded. These are real people's
+words about a real business. If a shortened quote opens on “He …”, the agent
+replaces the pronoun with the name — otherwise the quote points at nothing.
 
-Und: Zitate werden nur **gekürzt**, nie umformuliert. Es sind die Worte echter
-Leute über ein echtes Geschäft. Beginnt ein gekürztes Zitat auf „Er hat …",
-ersetzt der Agent das Pronomen durch den Namen — sonst zeigt das Zitat ins Leere.
+Stars are always **rounded up**; below 4.5 the generator warns.
 
-Sterne werden immer **aufgerundet**; unter 4,5 warnt der Generator.
+## Formats
 
-## Was drin ist
+`landscape` 1920×1080 · `portrait` 1080×1920 · `square` 1080×1080 — via
+`options.format` in `testimonials.json`.
+
+## What is in here
 
 ```
-ANLEITUNG.md                 Einrichtung für Einsteiger
-SKILL.md                     Anleitung für den Agenten
+SETUP.md                  setup for beginners
+SKILL.md                  instructions for the agent
 template/
-  build.mjs                  Generator + alle vermessenen Stilwerte
+  build.mjs                  generator + every measured style value
   csv-to-testimonials.mjs    CSV -> testimonials.json
-  testimonials.example.json  Beispieldatensatz
-  assets/fonts/              Inter, mitgeliefert für identische Renders
+  testimonials.example.json  example data set
+  assets/fonts/              Inter, bundled for identical renders
 ```
 
-## Formate
+Every project gets its own copy of `build.mjs` and the assets, so a finished
+video still renders years later even if this skill is updated or removed.
 
-`landscape` 1920×1080 · `portrait` 1080×1920 · `square` 1080×1080 —
-per `options.format` in `testimonials.json`.
+## Legal
+
+Reviews are statements by real people. They may be shortened but not edited in a
+way that changes their meaning, and advertising with invented or distorted
+reviews is illegal in most jurisdictions. Show only what is really there and name
+the source. Platform logos are trademarks, which is why the skill writes the
+source as text.
