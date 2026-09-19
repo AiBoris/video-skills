@@ -1,0 +1,18 @@
+{
+  "title": "Global Market Share",
+  "subtitle": "Quarterly revenue · $M",
+  "valueSuffix": "",
+  "periods": ["Q1", "Q2", "Q3", "Q4", "Q1", "Q2"],
+  "series": [
+    { "name": "Quanta", "values": [27, 62, 70, 84, 92, 100] },
+    { "name": "Orbit", "values": [24, 44, 50, 60, 62, 90] },
+    { "name": "Nimbus", "values": [21, 45, 56, 68, 84, 104] },
+    { "name": "Aurora", "values": [12, 33, 55, 76, 100, 140] },
+    { "name": "Vertex", "values": [6, 23, 45, 82, 125, 178] },
+    { "name": "Lumen", "values": [6, 16, 34, 60, 66, 132] }
+  ],
+  "options": {
+    "format": "landscape",
+    "visibleRows": 6
+  }
+}

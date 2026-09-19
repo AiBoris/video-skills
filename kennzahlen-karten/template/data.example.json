@@ -1,0 +1,63 @@
+{
+  "title": "LinkedIn Performance",
+  "subtitle": "1. bis 7. September 2026 · Reichweite, Profil, Newsletter",
+  "footnote": "Quelle: LinkedIn Analytics · Vergleich jeweils mit den 7 vorausgegangenen Tagen.",
+  "metrics": [
+    {
+      "label": "Impressions",
+      "value": 317,
+      "delta": "67 %",
+      "deltaTone": "down",
+      "note": "Aufrufe deiner Beiträge",
+      "meta": "7 Tage · ggü. Vorwoche",
+      "trend": "down"
+    },
+    {
+      "label": "Follower:innen",
+      "value": 8879,
+      "delta": "0 %",
+      "deltaTone": "flat",
+      "note": "Follower:innen insgesamt",
+      "meta": "Stand 7. September · unverändert",
+      "trend": "flat"
+    },
+    {
+      "label": "Profilbesuche",
+      "value": 266,
+      "delta": "33 %",
+      "deltaTone": "down",
+      "note": "Besucher:innen deines Profils",
+      "meta": "90 Tage · ggü. Vorwoche",
+      "trend": "down"
+    },
+    {
+      "label": "Suchtreffer",
+      "value": 173,
+      "delta": "0 %",
+      "deltaTone": "flat",
+      "note": "in Suchergebnissen erschienen",
+      "meta": "1.–7. Sept. · ggü. 25.–31. Aug.",
+      "trend": "flat"
+    },
+    {
+      "label": "Newsletter-Aufrufe",
+      "value": 25,
+      "delta": "17 %",
+      "deltaTone": "down",
+      "note": "Aufrufe von Newsletter-Artikeln",
+      "meta": "7 Tage · ggü. Vorwoche",
+      "trend": "down"
+    },
+    {
+      "label": "Newsletter-Abos",
+      "value": 3,
+      "note": "neue Abonnent:innen",
+      "meta": "7 Tage · kein Vorwochenwert",
+      "trend": "flat"
+    }
+  ],
+  "options": {
+    "format": "landscape",
+    "locale": "de"
+  }
+}

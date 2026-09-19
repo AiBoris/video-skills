@@ -1,0 +1,38 @@
+{
+  "brand": {
+    "kind": "company",
+    "name": "Kern Elektrotechnik",
+    "subject": "Frau Kern"
+  },
+  "intro": {
+    "headline": "Das sagen **unsere Kunden**",
+    "sub": "128 Bewertungen auf Google"
+  },
+  "defaultSource": { "name": "Google" },
+  "options": { "format": "landscape" },
+  "testimonials": [
+    {
+      "quote": "Angerufen um neun, Termin am selben Tag — **zwei Stunden später lief die Heizung**.",
+      "name": "Sabine Musterfrau",
+      "role": "Privatkundin",
+      "rating": 5,
+      "date": "12.02.2026",
+      "url": "https://maps.google.com/…"
+    },
+    {
+      "quote": "Drei Angebote verglichen. Das hier war **das einzige ohne Nachforderung** am Ende.",
+      "name": "Markus Beispiel",
+      "role": "Musterbau GmbH",
+      "rating": 5,
+      "date": "03.01.2026",
+      "url": "https://maps.google.com/…"
+    }
+  ],
+  "outro": {
+    "rating": 4.9,
+    "count": 128,
+    "source": "Google",
+    "cta": "Jetzt Termin sichern",
+    "website": "kern-elektrotechnik.de"
+  }
+}

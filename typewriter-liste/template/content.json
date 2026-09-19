@@ -1,0 +1,12 @@
+{
+  "title": "WARUM WIR NOCH WARTEN",
+  "lines": [
+    { "text": "1. DATENSCHUTZ" },
+    { "text": "2. UNSERE BRANCHE IST ANDERS" },
+    { "text": "3. DIE MITARBEITER MACHEN DAS NICHT MIT" },
+    { "text": "4. ERST MUSS DIE IT:" },
+    { "text": "A. DIE PROZESSE SAUBER HABEN", "sub": true },
+    { "text": "B. DEN DATENSCHUTZ PRÜFEN", "sub": true },
+    { "text": "5. NÄCHSTES JAHR DANN WIRKLICH" }
+  ]
+}

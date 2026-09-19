@@ -1,0 +1,11 @@
+{
+  "query": "Wie erstelle ich Videos mit KI?",
+  "format": "16:9",
+  "scale": 1,
+  "theme": "cream",
+  "labels": {
+    "search": "Google Search",
+    "lucky": "I'm Feeling Lucky"
+  },
+  "click": "search"
+}
