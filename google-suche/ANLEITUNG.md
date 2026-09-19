@@ -28,6 +28,17 @@ Steht dort eine kleinere Zahl als 22, eine Fehlermeldung oder
 
 Danach das Terminal einmal schließen und neu öffnen.
 
+**3. FFmpeg.** Das Programm, das am Ende die Videodatei schreibt. Prüfen:
+
+```
+ffmpeg -version
+```
+
+Kommt eine Fehlermeldung, installiere es:
+
+- **Mac:** `brew install ffmpeg` (braucht Homebrew von **https://brew.sh**)
+- **Windows:** `winget install ffmpeg`
+
 ---
 
 ## Schritt 1: Ordner entpacken
@@ -162,6 +173,9 @@ geklappt.
 
 **`npx: command not found` oder `node: command not found`**
 Node.js fehlt. Zurück zu „Was du vorher brauchst", Punkt 2.
+
+**Fehler beim Rendern, der FFmpeg erwähnt**
+FFmpeg fehlt. Zurück zu „Was du vorher brauchst", Punkt 3.
 
 **„No skills found" / „Keine Skills gefunden"**
 Der Pfad zeigt auf den falschen Ordner. Er muss auf den Ordner zeigen, in dem

@@ -1,6 +1,6 @@
 # video-skills
 
-Sechs Skills, die aus einem Satz Text ein fertig gerendertes Video machen —
+Sieben Skills, die aus einem Satz Text ein fertig gerendertes Video machen —
 für KI-Agenten wie Claude Code, Codex, Cursor, Gemini CLI oder Windsurf.
 
 Jeder Skill ist aus einer echten Referenzaufnahme vermessen: Timing, Abstände,
@@ -11,7 +11,7 @@ Gebaut auf [HyperFrames](https://github.com/heygen-com/hyperframes).
 
 ## Installieren
 
-Alle sechs auf einmal:
+Alle sieben auf einmal:
 
 ```bash
 npx skills add AiBoris/video-skills --global --copy --all
@@ -30,12 +30,17 @@ Danach den Agenten neu starten.
 
 ### Voraussetzungen
 
-- Node.js 22 oder neuer (`node --version`)
-- die HyperFrames CLI:
+- **Node.js 22 oder neuer** — `node --version`
+- **FFmpeg** — `ffmpeg -version`; schreibt am Ende die Videodatei.
+  Mac: `brew install ffmpeg`, Windows: `winget install ffmpeg`
+- **die HyperFrames CLI:**
 
 ```bash
 npx skills add heygen-com/hyperframes --global --copy --all
 ```
+
+Chrome lädt HyperFrames beim ersten Render selbst nach — darum musst du dich
+nicht kümmern.
 
 ## Die Skills
 
@@ -44,6 +49,7 @@ npx skills add heygen-com/hyperframes --global --copy --all
 | **google-suche** | Eine Frage tippt sich ins Google-Suchfeld, ein Mauszeiger klickt „Google Search". Die Startseite ist 1:1 nachgebaut. 16:9, 9:16, 1:1, 4:5. | eine Suchanfrage |
 | **wort-highlight** | Kinetic Typography: ein schräger Balken wandert Wort für Wort durch den Satz und dreht das Wort darunter auf Weiß. | ein Claim oder Hook |
 | **typewriter-liste** | Eine nummerierte Liste tippt sich Zeichen für Zeichen auf ein Blatt Papier. Schreibmaschinen-Optik. | Thesen, Ausreden, Regeln |
+| **radar-sweep** | Radarscheibe im Dunkeln: Ringe springen auf, ein Suchstrahl kreist mit Schweif, Kontakte blitzen auf. Kann eine ganze Serie bauen — pro Firmenname ein Video. | eine Überschrift, optional eine Namensliste |
 | **balken-race** | Bar Chart Race: Balken wachsen, überholen sich und tauschen die Plätze, während die Zahlen hochzählen. | eine CSV oder Tabelle |
 | **kennzahlen-karten** | Kennzahlen-Dashboard: Karten fahren versetzt herein, Zahlen zählen hoch, Badges zeigen die Veränderung. | eine Handvoll KPIs |
 | **testimonial-karten** | Kundenstimmen als Glaskarten: goldene Sterne, das Zitat schreibt sich ein, die Pointe leuchtet gold. | Zitate, eine CSV oder ein Bewertungsprofil |
@@ -84,7 +90,7 @@ wenn der Skill aktualisiert oder deinstalliert wird.
 Der Code steht unter der MIT-Lizenz (siehe `LICENSE`).
 
 Mitgelieferte Schriften stehen unter der SIL Open Font License und dürfen
-weitergegeben werden — Inter, Courier Prime und Poppins. Sie liegen lokal bei,
+weitergegeben werden — Inter, Courier Prime, Poppins und JetBrains Mono. Sie liegen lokal bei,
 damit Renders offline laufen und überall identisch aussehen.
 
 `google-suche/template/assets/google-logo.svg` ist Googles Wortmarke. Der Skill

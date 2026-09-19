@@ -30,9 +30,11 @@ Cursor, Gemini, Goose, opencode, Roo, Windsurf und weitere.
 
 ## Voraussetzungen
 
-Node.js 22 oder neuer (`node --version`), und die HyperFrames CLI:
+Node.js 22 oder neuer (`node --version`), FFmpeg (`ffmpeg -version`) und die
+HyperFrames CLI:
 
 ```bash
+brew install ffmpeg          # Mac; Windows: winget install ffmpeg
 npx skills add heygen-com/hyperframes --global --copy --all
 ```
 

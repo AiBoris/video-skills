@@ -30,6 +30,15 @@ node --version
 Kommt eine Zahl ab `v22`, ist alles gut. Kommt eine kleinere Zahl oder eine
 Fehlermeldung, installiere Node 22 von <https://nodejs.org> und mach dann weiter.
 
+**FFmpeg.** Das Programm, das am Ende die Videodatei schreibt. Prüfen mit:
+
+```
+ffmpeg -version
+```
+
+Kommt eine Fehlermeldung, installiere es — Mac: `brew install ffmpeg`
+(Homebrew von <https://brew.sh>), Windows: `winget install ffmpeg`.
+
 ## Schritt 2 — HyperFrames installieren
 
 Das ist die Software, die aus HTML ein Video rendert. Der Skill braucht sie.

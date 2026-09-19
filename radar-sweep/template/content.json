@@ -1,0 +1,11 @@
+{
+  "title": "Wir finden Fachkräfte für {name}",
+  "names": ["Nexora Automation GmbH"],
+  "subtitle": "GRID REF 34-B // ACTIVE",
+  "format": "16:9",
+  "duration": 6,
+  "preset": "gruen",
+  "blips": 9,
+  "crosshair": true,
+  "scanlines": true
+}

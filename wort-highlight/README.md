@@ -26,7 +26,8 @@ Danach den KI-Agenten neu starten.
 
 ## Voraussetzungen
 
-Node.js 22 oder neuer (`node --version`), und die HyperFrames CLI:
+Node.js 22 oder neuer (`node --version`), FFmpeg (`ffmpeg -version`, Mac:
+`brew install ffmpeg`) und die HyperFrames CLI:
 
 ```bash
 npx skills add heygen-com/hyperframes
